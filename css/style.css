@@ -1,0 +1,125 @@
+@font-face {
+    font-family: "Anton";
+    src: url("../font/Anton/Anton-Regular.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 400;
+    font-display: optional;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Manrope";
+    src: url("../font/Manrope/Manrope-Regular.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 400;
+    font-display: optional;
+    font-display: swap;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Manrope", sans-serif;
+}
+
+.banner {
+    background: url('../assets/Banner/lampos-aritonang-24gR_9lCdes-unsplash-1.webp') center / cover no-repeat;
+    display: flex;
+    height: 667px;
+    position: relative;
+}
+
+.logo {
+    width: 207px;
+    height: 25.26px;
+    margin: 51px 0 0 69px;
+    position: absolute;
+}
+
+.div-search {
+    margin: auto;
+}
+
+.h1-banner {
+    color: #FFD15B;
+    width: 710px;
+    height: 132px;
+    margin: auto;
+    text-align: center;
+    font-size: 2.75em;
+    line-height: 66.24px;
+    font-weight: 400;
+    font-family: "Anton", sans-serif;
+}
+
+.paragraphe-search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* .paragraphe-search::after {
+    font: var(--fa-font-solid);
+    content: "\f00d";
+    display: inline-block;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-size: 1.5em;
+    position: absolute;
+    right: 74px;
+    color: #7A7A7A;
+} */
+
+.search {
+    width: 954px;
+    Height: 72px;
+    border-radius: 10px;
+    padding: 0 75px 0 35px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+}
+
+.search::-webkit-search-cancel-button {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.search::after::-webkit-search-cancel-button {
+    font: var(--fa-font-solid);
+    content: "\f00d";
+    display: inline-block;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-size: 1.5em;
+    position: absolute;
+    right: 74px;
+    color: #7A7A7A;
+}
+
+.btn-search {
+    Width: 51px;
+    Height: 52px;
+    border-radius: 10px;
+    background-color: #000000;
+    margin-right: 15px;
+    position: absolute;
+    left: 893px;
+    border: none;
+
+}
+
+.fa-magnifying-glass {
+    font-size: 1.688em;
+    color: #ffffff;
+}
+
+.btn-search:hover,
+.btn-search:focus {
+    background-color: #FFD15B;
+}
+
+.btn-search:hover .fa-magnifying-glass {
+    color: #000000
+}
