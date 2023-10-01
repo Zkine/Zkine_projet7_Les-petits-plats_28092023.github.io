@@ -21,6 +21,7 @@
     font-family: "Manrope", sans-serif;
 }
 
+/* header */
 .banner {
     background: url('../assets/Banner/lampos-aritonang-24gR_9lCdes-unsplash-1.webp') center / cover no-repeat;
     display: flex;
@@ -86,18 +87,6 @@
     cursor: pointer;
 }
 
-.search::after::-webkit-search-cancel-button {
-    font: var(--fa-font-solid);
-    content: "\f00d";
-    display: inline-block;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    font-size: 1.5em;
-    position: absolute;
-    right: 74px;
-    color: #7A7A7A;
-}
-
 .btn-search {
     Width: 51px;
     Height: 52px;
@@ -107,6 +96,7 @@
     position: absolute;
     left: 893px;
     border: none;
+    cursor: pointer;
 
 }
 
@@ -115,11 +105,162 @@
     color: #ffffff;
 }
 
-.btn-search:hover,
-.btn-search:focus {
+.btn-search:hover {
     background-color: #FFD15B;
 }
 
 .btn-search:hover .fa-magnifying-glass {
     color: #000000
+}
+
+.main-page {
+    padding: 21px 102px;
+    background-color: #EDEDED;
+}
+
+/* section tag */
+
+.section-tag {
+    display: flex;
+    gap: 63px;
+    align-items: center;
+}
+
+.btn-tag {
+    width: 195px;
+    height: 56px;
+    border-radius: 11px;
+    background-color: #ffffff;
+    border: none;
+    text-align: start;
+    padding-left: 15px;
+    font-size: 1em;
+    position: relative;
+    cursor: pointer;
+}
+
+.btn-tag::after {
+    font: var(--fa-font-solid);
+    content: "\f078";
+    display: inline-block;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-size: 1em;
+    position: absolute;
+    right: 15px;
+    color: #1B1B1B;
+}
+
+.span-tag {
+    margin-left: auto;
+    text-align: end;
+    font-size: 1.3125em;
+    color: #000000;
+}
+
+.nb-recettes {
+    margin: 0;
+    font-weight: 400;
+    font-family: "Anton", sans-serif;
+}
+
+.section-media {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.article-media {
+    width: 380px;
+    height: 731px;
+    border-radius: 21px;
+    background-color: #ffffff;
+    margin: 55px 0;
+    position: relative;
+
+}
+
+.article-media:nth-child(3n+2) {
+    margin: auto;
+}
+
+.article-media:nth-child(3n+3) {
+    margin-left: auto;
+}
+
+.figure-media {
+    margin: 0;
+}
+
+.img-media {
+    width: 380px;
+    height: 253px;
+    object-fit: cover;
+    border-radius: 21px 21px 0 0;
+}
+
+.figcaption-media {
+    font-family: "Anton", sans-serif;
+    font-size: 1.125em;
+    margin: 32px 0 0 25px;
+}
+
+.div-recette-media {
+    margin: 32px 25px 32px 25px;
+}
+
+.titre-recette-media {
+    font-weight: 700;
+    font-size: 0.75em;
+    color: #7A7A7A;
+    text-transform: uppercase;
+}
+
+.paragraphe-recette-media {
+    font-size: 0.875em;
+    color: #000000;
+    height: 76px;
+    overflow: hidden;
+    line-height: 19.12px;
+}
+
+.div-ingrédient-media {
+    margin: 0 25px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    height: 190px;
+}
+
+.titre-recette-media {
+    grid-column: 1 / 3;
+}
+
+.div-titre-media {
+    font-size: 0.875em;
+}
+
+.titre-ingrédient-media {
+    font-weight: 500;
+    line-height: 19.12px;
+    margin: 0;
+}
+
+.ingredients-recette-media {
+    font-weight: 400;
+    color: #7A7A7A;
+    margin: 0;
+}
+
+.span-time {
+    position: absolute;
+    top: 21px;
+    left: 295px;
+    width: 63px;
+    height: 26px;
+    background-color: #FFD15B;
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.75em;
+    font-weight: 400;
 }
