@@ -235,16 +235,20 @@
 }
 
 .div-titre-media {
-    font-size: 0.875em;
+    height: 39px;
+    margin-bottom: 25px;
 }
 
 .titre-ingrédient-media {
+    font-size: 0.875em;
     font-weight: 500;
     line-height: 19.12px;
     margin: 0;
+    width: 159px;
 }
 
 .ingredients-recette-media {
+    font-size: 0.875em;
     font-weight: 400;
     color: #7A7A7A;
     margin: 0;
