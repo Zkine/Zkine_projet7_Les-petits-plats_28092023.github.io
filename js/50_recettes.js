@@ -43,6 +43,7 @@ const renderMedia = () => {
       for (const value of module.recipes) {
         const articleMedia = document.createElement("article");
         articleMedia.classList = "article-media";
+        articleMedia.id = "article-media-id";
         sectionMedia.appendChild(articleMedia);
 
         const figureMedia = document.createElement("figure");
@@ -61,6 +62,7 @@ const renderMedia = () => {
 
         const figcaptionMedia = document.createElement("figcaption");
         figcaptionMedia.classList = "figcaption-media";
+        figcaptionMedia.id = "input-id";
         figcaptionMedia.textContent = `${value.name}`;
         figureMedia.appendChild(figcaptionMedia);
 
@@ -70,11 +72,13 @@ const renderMedia = () => {
 
         const titreRecette = document.createElement("h2");
         titreRecette.classList = "titre-recette-media";
+        titreRecette.id = "input-id";
         titreRecette.textContent = "RECETTE";
         divRecette.appendChild(titreRecette);
 
         const paragrapheRecette = document.createElement("p");
         paragrapheRecette.classList = "paragraphe-recette-media";
+        paragrapheRecette.id = "input-id";
         paragrapheRecette.textContent = `${value.description}`;
         divRecette.appendChild(paragrapheRecette);
 
@@ -84,6 +88,7 @@ const renderMedia = () => {
 
         const titreIngrédient = document.createElement("h2");
         titreIngrédient.classList = "titre-recette-media";
+        titreIngrédient.id = "input-id";
         titreIngrédient.textContent = "Ingrédients";
         divIngrédient.appendChild(titreIngrédient);
 
@@ -94,11 +99,13 @@ const renderMedia = () => {
 
           const titreIngredients = document.createElement("h3");
           titreIngredients.classList = "titre-ingrédient-media";
+          titreIngredients.id = "input-id";
           titreIngredients.textContent = `${element.ingredient}`;
           divTitre.appendChild(titreIngredients);
 
           const quantite = document.createElement("p");
           quantite.classList = "ingredients-recette-media";
+          quantite.id = "input-id";
           quantite.textContent =
             `${element.quantity}` !== "undefined" &&
             `${element.unit}` !== "undefined"

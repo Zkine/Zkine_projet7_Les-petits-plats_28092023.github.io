@@ -59,6 +59,22 @@
     position: relative;
 }
 
+.paragraphe-search[data-error]::after {
+    content: attr(data-error);
+    font-size: 1em;
+    color: #FFD15B;
+    display: block;
+    margin: 2px 0;
+    opacity: 0;
+    transition: 300ms;
+    position: absolute;
+    bottom: -30px;
+}
+
+.paragraphe-search[data-error-visible="true"]::after {
+    opacity: 1;
+}
+
 /* .paragraphe-search::after {
     font: var(--fa-font-solid);
     content: "\f00d";
@@ -83,7 +99,6 @@
 }
 
 .search::-webkit-search-cancel-button {
-    opacity: 1;
     cursor: pointer;
 }
 
