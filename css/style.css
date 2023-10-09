@@ -179,6 +179,11 @@
 
 }
 
+/* .article-media:nth-child(1) {
+    display: none;
+} */
+
+
 .article-media:nth-child(3n+2) {
     margin: auto;
 }
@@ -238,6 +243,10 @@
     height: 39px;
     margin-bottom: 25px;
 }
+
+/* .div-titre-media:nth-child(2) {
+    display: none;
+} */
 
 .titre-ingrédient-media {
     font-size: 0.875em;
