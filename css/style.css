@@ -158,7 +158,7 @@
     color: #000000;
 }
 
-.nb-recettes {
+.nb-recipe {
     margin: 0;
     font-weight: 400;
     font-family: "Anton", sans-serif;
@@ -178,11 +178,6 @@
     position: relative;
 
 }
-
-/* .article-media:nth-child(1) {
-    display: none;
-} */
-
 
 .article-media:nth-child(3n+2) {
     margin: auto;
@@ -209,18 +204,11 @@
     margin: 32px 0 0 25px;
 }
 
-.div-recette-media {
+.div-recipe-media {
     margin: 32px 25px 32px 25px;
 }
 
-.titre-recette-media {
-    font-weight: 700;
-    font-size: 0.75em;
-    color: #7A7A7A;
-    text-transform: uppercase;
-}
-
-.paragraphe-recette-media {
+.paragraph-recipe-media {
     font-size: 0.875em;
     color: #000000;
     height: 76px;
@@ -235,20 +223,20 @@
     height: 190px;
 }
 
-.titre-recette-media {
+.title-recipe-media {
+    font-weight: 700;
+    font-size: 0.75em;
+    color: #7A7A7A;
+    text-transform: uppercase;
     grid-column: 1 / 3;
 }
 
-.div-titre-media {
+.div-title-media {
     height: 39px;
     margin-bottom: 25px;
 }
 
-/* .div-titre-media:nth-child(2) {
-    display: none;
-} */
-
-.titre-ingrédient-media {
+.title-ingredient-media {
     font-size: 0.875em;
     font-weight: 500;
     line-height: 19.12px;
@@ -256,7 +244,7 @@
     width: 159px;
 }
 
-.ingredients-recette-media {
+.ingredients-recipe-media {
     font-size: 0.875em;
     font-weight: 400;
     color: #7A7A7A;

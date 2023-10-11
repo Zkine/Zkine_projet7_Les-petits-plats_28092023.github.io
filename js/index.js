@@ -1,6 +1,7 @@
-import { renderMedia } from "./50_recettes.js";
+import { renderMedia } from "./recipe.js";
 
-const boucleNative = () => {
+// Fonction qui fait appel au DATA des recettes puis la boucle permet d'incrémenter le DOM par défault ou par filtres
+const mediaIncrement = () => {
   import("../data/recipes.js")
     .then((module) => {
       for (const value of module.recipes) {
@@ -9,4 +10,4 @@ const boucleNative = () => {
     })
     .catch((err) => console.log("an error occurs", err));
 };
-export default boucleNative();
+export default mediaIncrement();
