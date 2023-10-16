@@ -39,6 +39,7 @@ export const renderMedia = (value) => {
 
   const paragrapheRecette = document.createElement("p");
   paragrapheRecette.classList = "paragraph-recipe-media";
+  paragrapheRecette.id = "paragraph-recipe-id";
   paragrapheRecette.textContent = `${value.description}`;
   divRecette.appendChild(paragrapheRecette);
 
@@ -58,6 +59,7 @@ export const renderMedia = (value) => {
 
     const titreIngredients = document.createElement("h3");
     titreIngredients.classList = "title-ingredient-media";
+    titreIngredients.id = "title-ingredient-id";
     titreIngredients.textContent = `${element.ingredient}`;
     divTitre.appendChild(titreIngredients);
 
@@ -75,21 +77,19 @@ export const renderMedia = (value) => {
 
     `${element.quantity}` !== "undefined" && divTitre.appendChild(quantite);
   }
-  const spanTime = document.createElement("span");
-  spanTime.classList = "span-time";
-  articleMedia.appendChild(spanTime);
 
   const paragrapheTime = document.createElement("p");
+  paragrapheTime.classList = "paragraph-time";
   paragrapheTime.id = "time-id";
   paragrapheTime.textContent = `${value.time}min`;
-  spanTime.appendChild(paragrapheTime);
+  articleMedia.appendChild(paragrapheTime);
 };
 
 // Affichage du nombre de recette(s)
-const NumberOfRecipes = () => {
+export const numberOfRecipes = () => {
   setTimeout(() => {
     const nbRecette = document.getElementById("nb-recipe-id");
     nbRecette.textContent = `${sectionMedia.children.length} recettes`;
-  }, 10);
+  }, 1);
 };
-NumberOfRecipes();
+numberOfRecipes();

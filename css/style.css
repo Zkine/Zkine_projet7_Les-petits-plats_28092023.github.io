@@ -52,14 +52,32 @@
     font-family: "Anton", sans-serif;
 }
 
-.paragraphe-search {
+.paragraph-search {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
 }
 
-/* .paragraphe-search::after {
+.paragraph-search[data-error]::after {
+    content: attr(data-error);
+    font-size: 1.2em;
+    color: #FFD15B;
+    display: block;
+    text-align: left;
+    opacity: 0;
+    transition: 300ms;
+    font-weight: normal;
+    position: absolute;
+    bottom: -49px;
+    text-align: center;
+}
+
+.paragraph-search[data-error-visible="true"]::after {
+    opacity: 1;
+}
+
+/* .paragraph-search::after {
     font: var(--fa-font-solid);
     content: "\f00d";
     display: inline-block;
@@ -78,7 +96,6 @@
     padding: 0 75px 0 35px;
     border: none;
     outline: none;
-    cursor: pointer;
     position: relative;
 }
 
@@ -97,19 +114,23 @@
     left: 893px;
     border: none;
     cursor: pointer;
+    color: #ffffff;
 
 }
 
-.fa-magnifying-glass {
+.btn-search::after {
+    font: var(--fa-font-solid);
+    content: "\f002";
+    display: inline-block;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
     font-size: 1.688em;
-    color: #ffffff;
+    top: 20%;
+    right: 25%;
 }
 
 .btn-search:hover {
     background-color: #FFD15B;
-}
-
-.btn-search:hover .fa-magnifying-glass {
     color: #000000
 }
 
@@ -151,15 +172,10 @@
     color: #1B1B1B;
 }
 
-.span-tag {
+.nb-recipe {
     margin-left: auto;
-    text-align: end;
     font-size: 1.3125em;
     color: #000000;
-}
-
-.nb-recipe {
-    margin: 0;
     font-weight: 400;
     font-family: "Anton", sans-serif;
 }
@@ -251,9 +267,9 @@
     margin: 0;
 }
 
-.span-time {
+.paragraph-time {
     position: absolute;
-    top: 21px;
+    top: 9px;
     left: 295px;
     width: 63px;
     height: 26px;
@@ -264,4 +280,5 @@
     align-items: center;
     font-size: 0.75em;
     font-weight: 400;
+    line-height: 16.39px;
 }
