@@ -64,13 +64,11 @@
     font-size: 1.2em;
     color: #FFD15B;
     display: block;
-    text-align: left;
     opacity: 0;
     transition: 300ms;
     font-weight: normal;
     position: absolute;
-    bottom: -49px;
-    text-align: center;
+    bottom: -25px;
 }
 
 .paragraph-search[data-error-visible="true"]::after {
