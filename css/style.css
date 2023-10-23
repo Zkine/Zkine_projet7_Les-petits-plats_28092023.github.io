@@ -52,6 +52,10 @@
     font-family: "Anton", sans-serif;
 }
 
+.form-search {
+    position: relative;
+}
+
 .paragraph-search {
     display: flex;
     justify-content: center;
@@ -75,18 +79,6 @@
     opacity: 1;
 }
 
-/* .paragraph-search::after {
-    font: var(--fa-font-solid);
-    content: "\f00d";
-    display: inline-block;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    font-size: 1.5em;
-    position: absolute;
-    right: 74px;
-    color: #7A7A7A;
-} */
-
 .search {
     width: 954px;
     Height: 72px;
@@ -98,8 +90,37 @@
 }
 
 .search::-webkit-search-cancel-button {
-    opacity: 1;
+    opacity: 0;
+}
+
+.btn-remove {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 25px;
+    left: 856px;
     cursor: pointer;
+    background-color: #ffffff;
+    border: none;
+    display: none;
+}
+
+.btn-remove::after {
+    cursor: pointer;
+    font: var(--fa-font-solid);
+    content: "\f00d";
+    display: inline-block;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    position: absolute;
+    top: 0%;
+    right: 6%;
+    color: #7A7A7A;
+    font-size: 25px;
+}
+
+.btn-remove-delete {
+    display: block;
 }
 
 .btn-search {
@@ -109,11 +130,11 @@
     background-color: #000000;
     margin-right: 15px;
     position: absolute;
+    top: 10px;
     left: 893px;
     border: none;
     cursor: pointer;
     color: #ffffff;
-
 }
 
 .btn-search::after {

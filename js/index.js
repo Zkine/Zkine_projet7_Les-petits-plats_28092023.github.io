@@ -3,25 +3,9 @@ import { renderMedia } from "./recipe.js";
 import { numberOfRecipes } from "./recipe.js";
 import { dataSearch } from "./filtered_input.js";
 
-//   const values = data.filter((val) => {
-//     for (const element of val.ingredients) {
-//       for (const n in result) {
-//         if (
-//           result.includes(val.name) ||
-//           result.includes(val.description) ||
-//           (result[n].ingredient !== undefined &&
-//             result[n].ingredient.includes(element.ingredient))
-//         ) {
-//           return val;
-//         }
-//       }
-//     }
-//   });
-//   return mediaIncrement(values);
-// };
-
 let result;
-//  fonction qui recherche dans le tableau des critères de recherche "repiceSearch" si le ou les mots saisis par l'utilisateur correspondent puis retourne le résultat
+//  fonction qui recherche dans le tableau des critères de recherche "repiceSearch" si le
+//  ou les caractères saisis par l'utilisateur correspondent puis retourne le résultat
 const dataFilterSearch = (e, repiceSearch) => {
   if (e.target.value.length >= 3) {
     result = repiceSearch.filter(
@@ -34,7 +18,8 @@ const dataFilterSearch = (e, repiceSearch) => {
   }
 };
 
-//Cette fonction indique à l'utilisateur si au moins trois lettres saisies correspondent aux critères de recherche
+//fonction qui indique à l'utilisateur si au moins trois lettres saisies correspondent aux critères de recherche
+const formSearch = document.getElementById("form-search-id");
 export const imputFilter = (e) => {
   const paragraphSearch = document.getElementById("paragraph-search-id");
 
@@ -64,24 +49,38 @@ export const imputFilter = (e) => {
   dataFilterSearch(e, repiceSearch);
 
   if (
-    (e.target.value.length <= 3 || result.length === 0) &&
-    imputSearch.value !== "" &&
-    result.length <= 0
+    (e.target.value.length <= 2 || result.length === 0) &&
+    imputSearch.value !== ""
   ) {
+    const btnRemove = formSearch[1];
     paragraphSearch.setAttribute("data-error-visible", "true");
     const regex = new RegExp(/([^‘]*)(?=\’)/);
-
-    const result = paragraphSearch
-      .getAttribute("data-error")
-      .replace(regex, e.target.value);
-
-    paragraphSearch.setAttribute("data-error", result);
+    if (e.target.value.length <= 5) {
+      const result = paragraphSearch
+        .getAttribute("data-error")
+        .replace(regex, e.target.value);
+      paragraphSearch.setAttribute("data-error", result);
+    }
+    return btnRemove.classList.add("btn-remove-delete");
   } else {
     paragraphSearch.setAttribute("data-error-visible", "false");
+    return (
+      btnRemove.classList.contains("btn-remove-delete") &&
+      btnRemove.classList.remove("btn-remove-delete")
+    );
   }
 };
 const imputSearch = document.getElementById("site-search");
-imputSearch.addEventListener("input", (e) => imputFilter(e));
+imputSearch.addEventListener("input", imputFilter);
+
+// fonction qui supprime les caractères dans la barre de recherche
+const imputRemove = (e) => {
+  formSearch.reset();
+  imputFilter(e);
+};
+
+const btnRemove = document.getElementById("btn-remove-id");
+btnRemove.addEventListener("click", imputRemove);
 
 // Fonction qui supprime les recettes, puis fait appel à dataSearch pour afficher les recettes recherchées ou si la recherche ne contient aucun
 // mot , la fonction mediaIncrement affichera toutes les recettes
@@ -92,10 +91,14 @@ const userSearch = () => {
       articleMedia[a].parentNode.removeChild(articleMedia[a]);
   }
 
-  if (result !== undefined && imputSearch.value !== "") {
+  if (
+    result !== undefined &&
+    imputSearch.value !== "" &&
+    (imputSearch.value.length >= 3 || imputSearch.value.length < 1)
+  ) {
     dataSearch(result, data);
   } else {
-    mediaIncrement();
+    return mediaIncrement();
   }
 };
 const btnSearch = document.getElementById("btn-search-id");

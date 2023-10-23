@@ -15,12 +15,15 @@
     <img src="assets/Banner/Logo.svg" alt="logo-Les petits plats" class="logo" />
     <div class="div-search">
       <h1 class="h1-banner">CHERCHEZ PARMI PLUS DE 1500 RECETTES DU QUOTIDIEN,SIMPLES ET DÉLICIEUSES</h1>
-      <p class="paragraph-search" id="paragraph-search-id" data-error-visible="false" data-error="Aucune recette ne contient ‘XXX ’ vous pouvez chercher «
+      <form class="form-search" id="form-search-id">
+        <p class="paragraph-search" id="paragraph-search-id" data-error-visible="false" data-error="Aucune recette ne contient ‘XXX ’ vous pouvez chercher «
       tarte aux pommes », « poisson », etc.">
-        <input type="search" name="site-search" id="site-search" class="search"
-          placeholder="Rechercher une recette, un ingrédient, ..." />
-        <button class="btn-search" id="btn-search-id"></button>
-      </p>
+          <input type="search" name="site-search" id="site-search" class="search"
+            placeholder="Rechercher une recette, un ingrédient, ..." />
+        </p>
+        <button type="button" class="btn-remove" id="btn-remove-id"></button>
+        <button type="button" class="btn-search" id="btn-search-id"></button>
+      </form>
     </div>
   </header>
   <main class="main-page" id="main">
