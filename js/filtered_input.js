@@ -2,6 +2,7 @@ import { mediaIncrement } from "./index.js";
 
 //Fonction qui filtre les recettes en fonction du ou des caractères saisis par l'utilisateur puis
 // fait appel à la fonction mediaIncrement qui affichera les recettes recherchées
+
 export const dataSearch = (result, data) => {
   const values = data
     .map((recipe) => {
