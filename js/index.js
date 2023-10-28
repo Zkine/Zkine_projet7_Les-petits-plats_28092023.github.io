@@ -14,7 +14,13 @@ const dataFilterSearch = (e, repiceSearch) => {
           .toLowerCase()
           .indexOf(e.target.value.toLowerCase()) !== -1
     );
-    return result;
+  }
+};
+
+const deleteItems = () => {
+  const sectionMedias = document.getElementById("section-media-id");
+  while (sectionMedias.hasChildNodes()) {
+    sectionMedias.removeChild(sectionMedias.firstChild);
   }
 };
 
@@ -22,6 +28,7 @@ const dataFilterSearch = (e, repiceSearch) => {
 const formSearch = document.getElementById("form-search-id");
 export const imputFilter = (e) => {
   const paragraphSearch = document.getElementById("paragraph-search-id");
+  const spanSearch = document.getElementById("span-search-id");
 
   const repiceName = data.map((obj) => {
     const rObj = obj.name;
@@ -33,17 +40,21 @@ export const imputFilter = (e) => {
     return rObj;
   });
 
-  const repiceIngredients = data.map((obj) => {
-    for (const o of obj.ingredients) {
-      const rObj = { ...o };
-      return rObj;
-    }
-  });
+  const repiceIngredients = data
+    .map((objs) =>
+      objs.ingredients.map((obj) => {
+        const rObj = obj.ingredient;
+        return rObj;
+      })
+    )
+    .flat();
+
+  repiceIngredients.shift();
 
   const repiceSearch = [
     ...repiceName,
     ...repiceDescription,
-    ...repiceIngredients,
+    ...new Set(repiceIngredients),
   ];
 
   dataFilterSearch(e, repiceSearch);
@@ -56,18 +67,32 @@ export const imputFilter = (e) => {
     paragraphSearch.setAttribute("data-error-visible", "true");
     const regex = new RegExp(/([^‘]*)(?=\’)/);
     if (e.target.value.length <= 5) {
-      const result = paragraphSearch
+      const characterInput = paragraphSearch
         .getAttribute("data-error")
         .replace(regex, e.target.value);
-      paragraphSearch.setAttribute("data-error", result);
+      paragraphSearch.setAttribute("data-error", characterInput);
+      spanSearch.classList.contains("span-search-active") &&
+        spanSearch.classList.remove("span-search-active");
     }
+    spanSearch.classList.remove("span-search-active");
     return btnRemove.classList.add("btn-remove-delete");
+  } else if (e.target.value.length >= 3) {
+    paragraphSearch.setAttribute("data-error-visible", "false");
+    btnRemove.classList.contains("btn-remove-delete") &&
+      btnRemove.classList.remove("btn-remove-delete");
+    spanSearch.classList.add("span-search-active");
+    deleteItems();
+    return dataSearch(result, data);
   } else {
     paragraphSearch.setAttribute("data-error-visible", "false");
-    return (
-      btnRemove.classList.contains("btn-remove-delete") &&
-      btnRemove.classList.remove("btn-remove-delete")
-    );
+    btnRemove.classList.contains("btn-remove-delete") &&
+    imputSearch.value !== ""
+      ? btnRemove.classList.remove("btn-remove-delete")
+      : spanSearch.classList.contains("span-search-active") &&
+        spanSearch.classList.remove("span-search-active"),
+      btnRemove.classList.remove("btn-remove-delete");
+    deleteItems();
+    return mediaIncrement();
   }
 };
 const imputSearch = document.getElementById("site-search");
@@ -76,43 +101,20 @@ imputSearch.addEventListener("input", imputFilter);
 // fonction qui supprime les caractères dans la barre de recherche
 const imputRemove = (e) => {
   formSearch.reset();
-  imputFilter(e);
+  return imputFilter(e);
 };
-
 const btnRemove = document.getElementById("btn-remove-id");
 btnRemove.addEventListener("click", imputRemove);
-
-// Fonction qui supprime les recettes, puis fait appel à dataSearch pour afficher les recettes recherchées ou si la recherche ne contient aucun
-// mot , la fonction mediaIncrement affichera toutes les recettes
-const userSearch = () => {
-  const articleMedia = document.querySelectorAll("#article-media-id");
-  for (const a in articleMedia) {
-    articleMedia[a].parentNode !== undefined &&
-      articleMedia[a].parentNode.removeChild(articleMedia[a]);
-  }
-
-  if (
-    result !== undefined &&
-    imputSearch.value !== "" &&
-    (imputSearch.value.length >= 3 || imputSearch.value.length < 1)
-  ) {
-    dataSearch(result, data);
-  } else {
-    return mediaIncrement();
-  }
-};
-const btnSearch = document.getElementById("btn-search-id");
-btnSearch.addEventListener("click", userSearch);
 
 // Fonction qui fait appel au DATA des recettes puis la boucle permet d'incrémenter le DOM par défault ou par filtres
 export const mediaIncrement = (values) => {
   if (values === undefined || values.length === 0) {
     values = data;
   }
-  for (const value of values) {
-    renderMedia(value);
-    numberOfRecipes();
-    values = [];
+  for (let i = 0; i < values.length; i++) {
+    renderMedia(values[i]);
   }
+  numberOfRecipes();
+  return (values = []);
 };
 export default mediaIncrement();

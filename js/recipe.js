@@ -4,7 +4,6 @@ const sectionMedia = document.getElementById("section-media-id");
 export const renderMedia = (value) => {
   const articleMedia = document.createElement("article");
   articleMedia.classList = "article-media";
-  articleMedia.id = "article-media-id";
   sectionMedia.appendChild(articleMedia);
 
   const figureMedia = document.createElement("figure");
@@ -14,7 +13,6 @@ export const renderMedia = (value) => {
   const imgMedia = document.createElement("img");
   imgMedia.setAttribute("loading", "lazy");
   imgMedia.classList = "img-media";
-  imgMedia.id = "img-id";
   imgMedia.setAttribute(
     "src",
     `../assets/Photos P7 JS Les petits plats/${value.image}`
@@ -24,7 +22,6 @@ export const renderMedia = (value) => {
 
   const figcaptionMedia = document.createElement("figcaption");
   figcaptionMedia.classList = "figcaption-media";
-  figcaptionMedia.id = "figcaption-id";
   figcaptionMedia.textContent = `${value.name}`;
   figureMedia.appendChild(figcaptionMedia);
 
@@ -39,7 +36,6 @@ export const renderMedia = (value) => {
 
   const paragrapheRecette = document.createElement("p");
   paragrapheRecette.classList = "paragraph-recipe-media";
-  paragrapheRecette.id = "paragraph-recipe-id";
   paragrapheRecette.textContent = `${value.description}`;
   divRecette.appendChild(paragrapheRecette);
 
@@ -59,7 +55,6 @@ export const renderMedia = (value) => {
 
     const titreIngredients = document.createElement("h3");
     titreIngredients.classList = "title-ingredient-media";
-    titreIngredients.id = "title-ingredient-id";
     titreIngredients.textContent = `${element.ingredient}`;
     divTitre.appendChild(titreIngredients);
 
@@ -87,9 +82,7 @@ export const renderMedia = (value) => {
 
 // Affichage du nombre de recette(s)
 export const numberOfRecipes = () => {
-  setTimeout(() => {
-    const nbRecette = document.getElementById("nb-recipe-id");
-    nbRecette.textContent = `${sectionMedia.children.length} recettes`;
-  }, 1);
+  const nbRecette = document.getElementById("nb-recipe-id");
+  nbRecette.textContent = `${sectionMedia.children.length} recettes`;
 };
 numberOfRecipes();
