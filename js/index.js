@@ -1,10 +1,9 @@
 import data from "../data/recipes.js";
 import { renderMedia, numberOfRecipes } from "./recipe.js";
-import { creationCriteriaTable } from "./filtered_input.js";
+import { creationCriteriaTable, imputFilter } from "./filtered_input.js";
 
 //  fonction qui recherche dans le tableau des critères de recherche "repiceSearch" si le
 //  ou les caractères saisis par l'utilisateur correspondent puis retourne le résultat
-
 export const dataFilterSearch = (e, result) => {
   if (e.target.value.length >= 3) {
     const { repiceSearch } = creationCriteriaTable(data);
@@ -15,9 +14,12 @@ export const dataFilterSearch = (e, result) => {
           .indexOf(e.target.value.toLowerCase()) !== -1
     );
   }
-  return { result };
+  imputFilter(e, result);
 };
 
+const imputSearch = document.getElementById("site-search");
+imputSearch.addEventListener("input", dataFilterSearch);
+// Suppression des recettes
 export const deleteItems = () => {
   const sectionMedias = document.getElementById("section-media-id");
   while (sectionMedias.hasChildNodes()) {

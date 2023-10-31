@@ -40,8 +40,8 @@ const formSearch = document.getElementById("form-search-id");
 const paragraphSearch = document.getElementById("paragraph-search-id");
 const spanSearch = document.getElementById("span-search-id");
 
-export const imputFilter = (e) => {
-  const { result } = dataFilterSearch(e);
+export const imputFilter = (e, result) => {
+  // const { result } = dataFilterSearch(e);
 
   const btnRemove = formSearch[1];
   if (
@@ -79,8 +79,6 @@ export const imputFilter = (e) => {
     return mediaIncrement();
   }
 };
-const imputSearch = document.getElementById("site-search");
-imputSearch.addEventListener("input", imputFilter);
 
 //Fonction qui filtre les recettes en fonction du ou des caractères saisis par l'utilisateur puis
 // fait appel à la fonction mediaIncrement qui affichera les recettes recherchées
