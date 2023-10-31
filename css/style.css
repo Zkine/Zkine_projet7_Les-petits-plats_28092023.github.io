@@ -72,11 +72,15 @@
     transition: 300ms;
     font-weight: normal;
     position: absolute;
-    bottom: -25px;
+    bottom: -51px;
+    width: 954px;
+    height: 50px;
+    text-align: justify;
 }
 
 .paragraph-search[data-error-visible="true"]::after {
     opacity: 1;
+    overflow-wrap: break-word;
 }
 
 .search {

@@ -1,34 +1,39 @@
 import data from "../data/recipes.js";
 import { renderMedia, numberOfRecipes } from "./recipe.js";
-import { creationCriteriaTable, imputFilter } from "./filtered_input.js";
+import { characterControlUser } from "./filtered_input.js";
 
-//  fonction qui recherche dans le tableau des critères de recherche "repiceSearch" si le
-//  ou les caractères saisis par l'utilisateur correspondent puis retourne le résultat
-export const dataFilterSearch = (e, result) => {
-  if (e.target.value.length >= 3) {
-    const { repiceSearch } = creationCriteriaTable(data);
-    result = repiceSearch.filter(
-      (el) =>
-        JSON.stringify(el)
-          .toLowerCase()
-          .indexOf(e.target.value.toLowerCase()) !== -1
-    );
+export const dataFilterSearch = (e) => {
+  if (imputSearch.value.length < 3) {
+    return characterControlUser(e, imputSearch, data);
   }
-  imputFilter(e, result, imputSearch);
+  const { result } = characterControlUser(e, imputSearch, data);
+  const values = data
+    .map((recipe) => {
+      for (let val = 0; val < recipe.ingredients.length; val++) {
+        for (let el = 0; el < result.length; el++) {
+          if (
+            result.includes(recipe.name) ||
+            result.includes(recipe.description) ||
+            result[el].toLowerCase() ===
+              recipe.ingredients[val].ingredient.toLowerCase()
+          ) {
+            return recipe;
+          }
+        }
+      }
+    })
+    .filter((y) => y !== undefined);
+  return values.length !== 0 && mediaIncrement(values);
 };
 const imputSearch = document.getElementById("site-search");
 imputSearch.addEventListener("input", dataFilterSearch);
 
-// Suppression des recettes
-export const deleteItems = () => {
-  const sectionMedias = document.getElementById("section-media-id");
+// Fonction qui fait appel au DATA des recettes puis la boucle permet d'incrémenter le DOM par défault ou par filtres
+const sectionMedias = document.getElementById("section-media-id");
+export const mediaIncrement = (values) => {
   while (sectionMedias.hasChildNodes()) {
     sectionMedias.removeChild(sectionMedias.firstChild);
   }
-};
-
-// Fonction qui fait appel au DATA des recettes puis la boucle permet d'incrémenter le DOM par défault ou par filtres
-export const mediaIncrement = (values) => {
   if (values === undefined || values.length === 0) {
     values = data;
   }
