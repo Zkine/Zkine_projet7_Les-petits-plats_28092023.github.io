@@ -27,19 +27,33 @@
     </div>
   </header>
   <main class="main-page" id="main">
-    <div class="section-tag">
-      <button class="btn-tag" id="btn-ingredient-id">Ingrédients</button>
-      <button class="btn-tag" id="btn-device-id">Appareils</button>
-      <button class="btn-tag" id="btn-utensil-id">Ustensiles</button>
+    <section class="div-tag">
+      <div class="btn-tag" id="btn-ingredient-id">
+        <h2 class="titre-btn">Ingrédients</h2>
+        <form class="form-tag" id="form-tag-id">
+          <div class="div-search-tag">
+            <input type="search" name="search-tag" id="search-tag" class="tag-search" />
+          </div>
+          <button type="button" class="btn-remove-tag" id="btn-remove-tag-id"></button>
+          <span class="span-search-tag" id="span-search-tag-id"><i class="fa-solid fa-magnifying-glass"></i></span>
+        </form>
+        <nav class="nav-tag" id="nav-tag-id"></nav>
+      </div>
+      <div class="btn-tag" id="btn-device-id">
+        <h2 class="titre-btn">Appareils</h2>
+      </div>
+      <div class="btn-tag" id="btn-utensil-id">
+        <h2 class="titre-btn">Ustensiles</h2>
+      </div>
       <p class="nb-recipe" id="nb-recipe-id">1500 recettes</p>
-    </div>
+    </section>
     <section class="section-media" id="section-media-id"></section>
   </main>
   <script type="module" src="./data/recipes.js"></script>
   <script type="module" src="./js/index.js"></script>
   <script type="module" src="./js/recipe.js"></script>
   <script type="module" src="./js/filtered_input.js"></script>
-  <script src="./js/filtered_tag.js"></script>
+  <script type="module" src="./js/filtered_tag.js"></script>
 </body>
 
 </html>
