@@ -14,11 +14,11 @@ export const dataFilterSearch = (e, result) => {
           .indexOf(e.target.value.toLowerCase()) !== -1
     );
   }
-  imputFilter(e, result);
+  imputFilter(e, result, imputSearch);
 };
-
 const imputSearch = document.getElementById("site-search");
 imputSearch.addEventListener("input", dataFilterSearch);
+
 // Suppression des recettes
 export const deleteItems = () => {
   const sectionMedias = document.getElementById("section-media-id");

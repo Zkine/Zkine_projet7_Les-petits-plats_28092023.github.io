@@ -40,9 +40,7 @@ const formSearch = document.getElementById("form-search-id");
 const paragraphSearch = document.getElementById("paragraph-search-id");
 const spanSearch = document.getElementById("span-search-id");
 
-export const imputFilter = (e, result) => {
-  // const { result } = dataFilterSearch(e);
-
+export const imputFilter = (e, result, imputSearch) => {
   const btnRemove = formSearch[1];
   if (
     (e.target.value.length <= 2 || result.length === 0) &&
