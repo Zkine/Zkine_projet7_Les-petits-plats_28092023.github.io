@@ -20,15 +20,12 @@ export const creationCriteriaTable = (datas, ingredients, repiceSearch) => {
       })
     )
     .flat();
+
   ingredients = [...new Set(repiceIngredients)];
   repiceSearch = [...repiceName, ...repiceDescription, ...ingredients];
   return { ingredients, repiceSearch };
 };
 
-//fonction qui indique à l'utilisateur si au moins trois lettres saisies correspondent aux critères de recherche
-const formSearch = document.getElementById("form-search-id");
-const spanSearch = document.getElementById("span-search-id");
-const paragraphSearch = document.getElementById("paragraph-search-id");
 export const characterControlUser = (e, imputSearch, data) => {
   const { repiceSearch } = creationCriteriaTable(data);
   const result = repiceSearch.filter(
@@ -36,6 +33,22 @@ export const characterControlUser = (e, imputSearch, data) => {
       JSON.stringify(el).toLowerCase().indexOf(e.target.value.toLowerCase()) !==
       -1
   );
+
+  validationEnteredCharacters(e, imputSearch, result);
+  return { result };
+};
+
+//fonction qui indique à l'utilisateur si au moins trois lettres saisies correspondent aux critères de recherche
+const formSearch = document.getElementById("form-search-id");
+const spanSearch = document.getElementById("span-search-id");
+const paragraphSearch = document.getElementById("paragraph-search-id");
+export const validationEnteredCharacters = (e, imputSearch, result) => {
+  // const { repiceSearch } = creationCriteriaTable(data);
+  // const result = repiceSearch.filter(
+  //   (el) =>
+  //     JSON.stringify(el).toLowerCase().indexOf(e.target.value.toLowerCase()) !==
+  //     -1
+  // );
   const btnRemove = formSearch[1];
   if (
     (e.target.value.length <= 2 || result.length === 0) &&
@@ -52,7 +65,6 @@ export const characterControlUser = (e, imputSearch, data) => {
       spanSearch.classList.contains("span-search-active") &&
         spanSearch.classList.remove("span-search-active");
     }
-
     spanSearch.classList.remove("span-search-active");
     btnRemove.classList.add("btn-remove-delete");
     return { result };

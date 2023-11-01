@@ -1,10 +1,13 @@
 import data from "../data/recipes.js";
 import { renderMedia, numberOfRecipes } from "./recipe.js";
-import { characterControlUser } from "./filtered_input.js";
+import {
+  validationEnteredCharacters,
+  characterControlUser,
+} from "./filtered_input.js";
 
 export const dataFilterSearch = (e) => {
   if (imputSearch.value.length < 3) {
-    return characterControlUser(e, imputSearch, data);
+    return validationEnteredCharacters(e, imputSearch, data);
   }
   const { result } = characterControlUser(e, imputSearch, data);
   const values = data
@@ -23,7 +26,7 @@ export const dataFilterSearch = (e) => {
       }
     })
     .filter((y) => y !== undefined);
-  return values.length !== 0 && mediaIncrement(values);
+  return values.length !== 0 ? mediaIncrement(values) : null;
 };
 const imputSearch = document.getElementById("site-search");
 imputSearch.addEventListener("input", dataFilterSearch);
