@@ -75,7 +75,7 @@
     bottom: -51px;
     width: 954px;
     height: 50px;
-    text-align: justify;
+    text-align: center;
 }
 
 .paragraph-search[data-error-visible="true"]::after {
@@ -197,10 +197,12 @@
     height: 315px;
     overflow: hidden;
     top: 129px;
+    cursor: default
 }
 
 .titre-btn {
     font-size: 1em;
+    position: relative;
 }
 
 .titre-btn::after {
@@ -210,8 +212,22 @@
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     position: absolute;
-    right: 15px;
-    top: 20px;
+    right: 0px;
+    top: 0px;
+}
+
+.titre-btn::before {
+    content: "";
+    position: absolute;
+    width: 195px;
+    height: 56px;
+    top: -18px;
+    left: -15px;
+}
+
+.btn-tag-active .titre-btn::before {
+    z-index: 1;
+    cursor: default;
 }
 
 .tag-search::-webkit-search-cancel-button {
@@ -231,9 +247,8 @@
     display: inline-block;
 }
 
-
 .tag-search {
-    width: 148px;
+    width: 165px;
     height: 36px;
     border-radius: 2px;
     border: #7A7A7A 1px solid;
@@ -249,6 +264,7 @@
     border: none;
     background: rgba(0, 0, 0, 0);
     height: 10px;
+    width: 10px;
 }
 
 .btn-remove-tag::after {
@@ -261,8 +277,8 @@
     position: absolute;
     color: #7A7A7A;
     font-size: 12px;
-    width: 6px;
-    height: 6px;
+    width: 10px;
+    height: 10px;
     top: 0px;
     left: 2px;
 }
@@ -279,10 +295,9 @@
 
 .span-search-tag::after {
     content: "";
-    width: 25px;
-    height: 25px;
+    width: 13px;
+    height: 19px;
     position: absolute;
-    /* background-color: #FFD15B; */
     right: 1px;
     z-index: 1;
 }
@@ -300,9 +315,11 @@
 }
 
 .li-tag {
-    font-size: 0, 875em;
+    font-size: 0.875em;
     line-height: 1.195em;
     margin-bottom: 15px;
+    color: #1B1B1B;
+    text-transform: capitalize;
 }
 
 .nb-recipe {
@@ -312,6 +329,8 @@
     font-family: "Anton", sans-serif;
 }
 
+
+/* style recettes */
 .section-media {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

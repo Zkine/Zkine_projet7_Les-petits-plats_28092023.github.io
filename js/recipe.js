@@ -1,7 +1,7 @@
 const sectionMedia = document.getElementById("section-media-id");
 
 // Création du DOM pour une recette
-export const renderMedia = (value) => {
+export function renderMedia(value) {
   const articleMedia = document.createElement("article");
   articleMedia.classList = "article-media";
   sectionMedia.appendChild(articleMedia);
@@ -78,11 +78,11 @@ export const renderMedia = (value) => {
   paragrapheTime.id = "time-id";
   paragrapheTime.textContent = `${value.time}min`;
   articleMedia.appendChild(paragrapheTime);
-};
+}
 
 // Affichage du nombre de recette(s)
-export const numberOfRecipes = () => {
+export function numberOfRecipes() {
   const nbRecette = document.getElementById("nb-recipe-id");
   nbRecette.textContent = `${sectionMedia.children.length} recettes`;
-};
+}
 numberOfRecipes();
