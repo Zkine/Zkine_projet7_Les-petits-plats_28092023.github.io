@@ -77,48 +77,14 @@ export function validationEnteredCharacters(e, imputSearch, result) {
     return imputSearch.value.length <= 0 && mediaIncrement();
   }
 }
-// export function validationEnteredCharacters(e, imputSearch, result) {
-//   const btnRemove = formSearch[1];
-//   if (
-//     (e.target.value.length <= 2 || result.length === 0) &&
-//     imputSearch.value !== ""
-//   ) {
-//     paragraphSearch.setAttribute("data-error-visible", "true");
-//     const regex = new RegExp(/([^‘]*)(?=\’)/);
-//     if (e.target.value.length >= 3 || e.target.value.length <= 20) {
-//       const characterInput = paragraphSearch
-//         .getAttribute("data-error")
-//         .replace(regex, e.target.value);
-//       paragraphSearch.setAttribute("data-error", characterInput);
 
-//       spanSearch.classList.contains("span-search-active") &&
-//         spanSearch.classList.remove("span-search-active");
-//     }
-//     spanSearch.classList.remove("span-search-active");
-//     btnRemove.classList.contains("btn-remove-delete") &&
-//       btnRemove.classList.remove("btn-remove-delete");
-//     return {};
-//   } else if (e.target.value.length >= 3) {
-//     paragraphSearch.setAttribute("data-error-visible", "false");
-
-//     btnRemove.classList.add("btn-remove-delete");
-//     spanSearch.classList.add("span-search-active");
-//     return { result };
-//   } else {
-//     paragraphSearch.setAttribute("data-error-visible", "false");
-//     btnRemove.classList.contains("btn-remove-delete") &&
-//     imputSearch.value !== ""
-//       ? btnRemove.classList.remove("btn-remove-delete")
-//       : spanSearch.classList.contains("span-search-active") &&
-//         spanSearch.classList.remove("span-search-active"),
-//       btnRemove.classList.remove("btn-remove-delete");
-//     return mediaIncrement();
-//   }
-// }
 // fonction qui supprime les caractères dans la barre de recherche
 function imputRemove() {
   formSearch.reset();
-  btnRemove.classList.remove("btn-remove-delete");
+  btnRemove.classList.contains("btn-remove-delete") &&
+    btnRemove.classList.remove("btn-remove-delete");
+  spanSearch.classList.contains("span-search-active") &&
+    spanSearch.classList.remove("span-search-active");
   paragraphSearch.setAttribute("data-error-visible", "false");
   return mediaIncrement();
 }
