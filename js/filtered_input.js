@@ -1,42 +1,57 @@
 import { mediaIncrement } from "./index.js";
 
 //Création d'un tableau "repiceSearch" des critères de recherches
-export function creationCriteriaTable(data, ingredients, repiceSearch) {
-  const repiceName = data.map(function (obj) {
-    const rObj = obj.name;
-    return rObj;
-  });
+export function creationCriteriaTable(data, e, ingredients, repiceSearch) {
+  if (e !== undefined && e.target.attributes[1].textContent === "main-search") {
+    const repiceName = data.map(function (obj) {
+      const rObj = obj.name;
+      return rObj;
+    });
 
-  const repiceDescription = data.map(function (obj) {
-    const rObj = obj.description;
-    return rObj;
-  });
+    const repiceDescription = data.map(function (obj) {
+      const rObj = obj.description;
+      return rObj;
+    });
 
-  const repiceIngredients = data
-    .map(function (objs) {
-      return objs.ingredients.map(function (obj) {
-        const rObj = obj.ingredient.toLowerCase();
-        return rObj;
-      });
-    })
-    .flat();
+    const repiceIngredients = data
+      .map(function (objs) {
+        return objs.ingredients.map(function (obj) {
+          const rObj = obj.ingredient.toLowerCase();
+          return rObj;
+        });
+      })
+      .flat();
 
-  ingredients = [...new Set(repiceIngredients)];
-  repiceSearch = [...repiceName, ...repiceDescription, ...ingredients];
-  return { ingredients, repiceSearch };
+    repiceSearch = [
+      ...repiceName,
+      ...repiceDescription,
+      ...new Set(repiceIngredients),
+    ];
+    return { ingredients, repiceSearch };
+  } else {
+    const repiceIngredients = data
+      .map(function (objs) {
+        return objs.ingredients.map(function (obj) {
+          const rObj = obj.ingredient.toLowerCase();
+          return rObj;
+        });
+      })
+      .flat();
+
+    ingredients = [...new Set(repiceIngredients)];
+    return { ingredients };
+  }
 }
 
 //Fonction qui filtrer le contenu du tableau des critères de recherche - fonction creationCriteriaTable - selon les données saisies par l'utilisateur
 //et crée un tableau : constante result.
 export function characterControlUser(e, repiceSearch) {
-  // const { repiceSearch } = creationCriteriaTable(data);
   const result = repiceSearch.filter(function (el) {
     return (
       JSON.stringify(el).toLowerCase().indexOf(e.target.value.toLowerCase()) !==
       -1
     );
   });
-  // validationEnteredCharacters(e, imputSearch, result);
   return { result };
 }
 
@@ -46,47 +61,46 @@ const spanSearch = document.getElementById("span-search-id");
 const paragraphSearch = document.getElementById("paragraph-search-id");
 export function validationEnteredCharacters(e, imputSearch, result) {
   const btnRemove = formSearch[1];
-  if (result.length === 0) {
+  if (result !== undefined && result.length === 0) {
     const regex = new RegExp(/([^‘]*)(?=\’)/);
-    if (e.target.value.length <= 20) {
-      const characterInput = paragraphSearch
-        .getAttribute("data-error")
-        .replace(regex, e.target.value);
+    const characterInput = paragraphSearch
+      .getAttribute("data-error")
+      .replace(regex, e.target.value);
+    e.target.value.length <= 20 &&
       paragraphSearch.setAttribute("data-error", characterInput);
-      paragraphSearch.setAttribute("data-error-visible", "true");
-
-      !spanSearch.classList.contains("span-search-active") &&
-        spanSearch.classList.add("span-search-active");
-      !btnRemove.classList.contains("btn-remove-delete") &&
-        btnRemove.classList.add("btn-remove-delete");
-      return {};
-    }
-  } else if (result.length !== 0 && imputSearch.value.length >= 3) {
+    paragraphSearch.setAttribute("data-error-visible", "true");
+    !spanSearch.classList.contains("span-search-active") &&
+      spanSearch.classList.add("span-search-active");
+    !btnRemove.classList.contains("btn-remove-delete") &&
+      btnRemove.classList.add("btn-remove-delete");
+    return {};
+  } else if (
+    result !== undefined &&
+    result.length !== 0 &&
+    imputSearch.value.length >= 3
+  ) {
     paragraphSearch.setAttribute("data-error-visible", "false");
     !btnRemove.classList.contains("btn-remove-delete") &&
       btnRemove.classList.add("btn-remove-delete");
     spanSearch.classList.contains("span-search-active") &&
       spanSearch.classList.remove("span-search-active");
     return { result };
-  } else if (imputSearch.value.length <= 2) {
+  } else {
     paragraphSearch.setAttribute("data-error-visible", "false");
     btnRemove.classList.contains("btn-remove-delete") &&
       btnRemove.classList.remove("btn-remove-delete");
     spanSearch.classList.contains("span-search-active") &&
       spanSearch.classList.remove("span-search-active");
-    return imputSearch.value.length <= 0 && mediaIncrement();
+    return imputRemove(imputSearch);
   }
 }
 
 // fonction qui supprime les caractères dans la barre de recherche
-function imputRemove() {
-  formSearch.reset();
-  btnRemove.classList.contains("btn-remove-delete") &&
-    btnRemove.classList.remove("btn-remove-delete");
-  spanSearch.classList.contains("span-search-active") &&
-    spanSearch.classList.remove("span-search-active");
-  paragraphSearch.setAttribute("data-error-visible", "false");
-  return mediaIncrement();
+function imputRemove(imputSearch) {
+  return (
+    (imputSearch === undefined || imputSearch.value.length === 0) &&
+    (formSearch.reset(), mediaIncrement())
+  );
 }
 const btnRemove = document.getElementById("btn-remove-id");
-btnRemove.addEventListener("click", imputRemove);
+btnRemove.addEventListener("click", validationEnteredCharacters);
