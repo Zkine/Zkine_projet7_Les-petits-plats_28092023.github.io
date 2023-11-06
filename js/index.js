@@ -1,11 +1,11 @@
 import data from "../data/recipes.js";
 import { renderMedia, numberOfRecipes } from "./recipe.js";
 import {
-  validationEnteredCharacters,
+  validationCharacters,
   creationCriteriaTable,
   characterControlUser,
 } from "./filtered_input.js";
-import { searchManagement } from "./filtered_tag.js";
+import { arrayInitialization } from "./filtered_tag.js";
 
 let result;
 let repiceSearch;
@@ -14,18 +14,21 @@ let values;
 
 // Fonction qui recherche les recettes dans les données data selon le resultat renvoyé par la fonction characterControlUser et crée un tableau nommé values
 export function dataFilterSearch(e) {
-  if (imputSearch.value.length < 3) {
-    validationEnteredCharacters(e, imputSearch, data);
-  } else if (imputSearch.value.length >= 3) {
-    ({ repiceSearch } = creationCriteriaTable(data, e));
-    ({ result } = characterControlUser(e, repiceSearch));
-    ({ result } = validationEnteredCharacters(e, imputSearch, result));
+  if (
+    this.getAttribute("name") === "main-search" &&
+    imputSearch.value.length < 3
+  ) {
+    validationCharacters(e, imputSearch, data);
+  } else if (this.value.length >= 3) {
+    this.getAttribute("name") === "main-search"
+      ? (({ repiceSearch } = creationCriteriaTable(data, e)),
+        ({ result } = characterControlUser(e, repiceSearch)),
+        ({ result } = validationCharacters(e, imputSearch, result)))
+      : (({ ingredients } = creationCriteriaTable(data, e)),
+        ({ result } = characterControlUser(e, ingredients)));
   }
 
-  if (
-    (result !== undefined && imputSearch.value.length >= 3) ||
-    searchTag.value.length >= 3
-  ) {
+  if (result !== undefined && imputSearch.value.length >= 3) {
     values = data
       .map(function (recipe) {
         for (let val = 0; val < recipe.ingredients.length; val++) {
@@ -49,11 +52,8 @@ export function dataFilterSearch(e) {
 }
 const imputSearch = document.getElementById("site-search");
 imputSearch.addEventListener("input", dataFilterSearch);
-const searchTag = document.getElementById("search-tag-id");
-searchTag.addEventListener("input", dataFilterSearch);
 
 // Fonction qui fait appel au DATA des recettes puis la boucle permet d'incrémenter le DOM par défault ou par filtres
-
 const sectionMedias = document.getElementById("section-media-id");
 export function mediaIncrement(values) {
   while (sectionMedias.hasChildNodes()) {
@@ -67,7 +67,7 @@ export function mediaIncrement(values) {
   }
   numberOfRecipes();
   ({ ingredients } = creationCriteriaTable(values));
-  searchManagement(ingredients);
+  arrayInitialization(ingredients);
   return (values = []);
 }
 export default mediaIncrement();

@@ -173,7 +173,6 @@
     border-radius: 11px;
     background-color: #ffffff;
     border: none;
-    padding: 5px 15px;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -207,6 +206,7 @@
 .titre-btn {
     font-size: 1em;
     position: relative;
+    padding: 5px 15px 0;
 }
 
 .titre-btn::after {
@@ -216,8 +216,8 @@
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     position: absolute;
-    right: 0px;
-    top: 0px;
+    right: 15px;
+    top: 5px;
 }
 
 .titre-btn::before {
@@ -226,7 +226,7 @@
     width: 195px;
     height: 56px;
     top: -18px;
-    left: -15px;
+    left: 0px;
 }
 
 .btn-tag-active .titre-btn::before {
@@ -261,6 +261,7 @@
     outline: none;
     color: #7A7A7A;
     font-size: 0.875em;
+    margin-left: 15px;
 }
 
 .btn-remove-tag {
@@ -333,6 +334,49 @@
     margin-bottom: 15px;
     color: #1B1B1B;
     text-transform: capitalize;
+    cursor: pointer;
+    padding-left: 15px;
+}
+
+.li-tag-active {
+    width: 195px;
+    height: 37px;
+    background-color: #FFD15B;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.li-tag-active:hover {
+    font-weight: 900;
+}
+
+.remove-tag {
+    display: none;
+    position: relative;
+    right: 18px;
+    background: rgba(0, 0, 0, 0);
+    border: none;
+}
+
+.li-tag-active:hover .remove-tag {
+    display: block;
+}
+
+.remove-tag::after {
+    position: absolute;
+    cursor: pointer;
+    font: var(--fa-font-solid);
+    content: "\f057";
+    display: inline-block;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    position: absolute;
+    top: -8px;
+    right: -3px;
+    font-size: 17px;
 }
 
 .nb-recipe {

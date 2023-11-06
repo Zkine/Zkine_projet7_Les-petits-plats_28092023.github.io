@@ -2,7 +2,7 @@ import { mediaIncrement } from "./index.js";
 
 //Création d'un tableau "repiceSearch" des critères de recherches
 export function creationCriteriaTable(data, e, ingredients, repiceSearch) {
-  if (e !== undefined && e.target.attributes[1].textContent === "main-search") {
+  if (e !== undefined && e.target.getAttribute("name") === `main-search`) {
     const repiceName = data.map(function (obj) {
       const rObj = obj.name;
       return rObj;
@@ -59,7 +59,7 @@ export function characterControlUser(e, repiceSearch) {
 const formSearch = document.getElementById("form-search-id");
 const spanSearch = document.getElementById("span-search-id");
 const paragraphSearch = document.getElementById("paragraph-search-id");
-export function validationEnteredCharacters(e, imputSearch, result) {
+export function validationCharacters(e, imputSearch, result) {
   const btnRemove = formSearch[1];
   if (result !== undefined && result.length === 0) {
     const regex = new RegExp(/([^‘]*)(?=\’)/);
@@ -69,10 +69,8 @@ export function validationEnteredCharacters(e, imputSearch, result) {
     e.target.value.length <= 20 &&
       paragraphSearch.setAttribute("data-error", characterInput);
     paragraphSearch.setAttribute("data-error-visible", "true");
-    !spanSearch.classList.contains("span-search-active") &&
-      spanSearch.classList.add("span-search-active");
-    !btnRemove.classList.contains("btn-remove-delete") &&
-      btnRemove.classList.add("btn-remove-delete");
+    spanSearch.classList.add("span-search-active");
+    btnRemove.classList.add("btn-remove-delete");
     return {};
   } else if (
     result !== undefined &&
@@ -87,13 +85,13 @@ export function validationEnteredCharacters(e, imputSearch, result) {
     return { result };
   } else {
     paragraphSearch.setAttribute("data-error-visible", "false");
-    btnRemove.classList.contains("btn-remove-delete") &&
-      btnRemove.classList.remove("btn-remove-delete");
-    spanSearch.classList.contains("span-search-active") &&
-      spanSearch.classList.remove("span-search-active");
+    btnRemove.classList.remove("btn-remove-delete");
+    spanSearch.classList.remove("span-search-active");
     return imputRemove(imputSearch);
   }
 }
+const btnRemove = document.getElementById("btn-remove-id");
+btnRemove.addEventListener("click", validationCharacters);
 
 // fonction qui supprime les caractères dans la barre de recherche
 function imputRemove(imputSearch) {
@@ -102,5 +100,3 @@ function imputRemove(imputSearch) {
     (formSearch.reset(), mediaIncrement())
   );
 }
-const btnRemove = document.getElementById("btn-remove-id");
-btnRemove.addEventListener("click", validationEnteredCharacters);
