@@ -11,24 +11,30 @@ let result;
 let repiceSearch;
 let ingredients;
 let values;
+let userSelection;
 
 // Fonction qui recherche les recettes dans les données data selon le resultat renvoyé par la fonction characterControlUser et crée un tableau nommé values
 export function dataFilterSearch(e) {
   if (
-    this.getAttribute("name") === "main-search" &&
+    e.target.getAttribute("name") === "main-search" &&
     imputSearch.value.length < 3
   ) {
     validationCharacters(e, imputSearch, data);
-  } else if (this.value.length >= 3) {
-    this.getAttribute("name") === "main-search"
+  } else if (
+    (e.target.value !== undefined && e.target.value.length >= 3) ||
+    e.target.textContent.length >= 3
+  ) {
+    e.target.getAttribute("name") === "main-search"
       ? (({ repiceSearch } = creationCriteriaTable(data, e)),
         ({ result } = characterControlUser(e, repiceSearch)),
         ({ result } = validationCharacters(e, imputSearch, result)))
-      : (({ ingredients } = creationCriteriaTable(data, e)),
-        ({ result } = characterControlUser(e, ingredients)));
+      : result === e.target.textContent;
   }
 
-  if (result !== undefined && imputSearch.value.length >= 3) {
+  if (
+    (result !== undefined && e.target.value.length >= 3) ||
+    e.target.textContent.length >= 3
+  ) {
     values = data
       .map(function (recipe) {
         for (let val = 0; val < recipe.ingredients.length; val++) {
@@ -52,7 +58,26 @@ export function dataFilterSearch(e) {
 }
 const imputSearch = document.getElementById("site-search");
 imputSearch.addEventListener("input", dataFilterSearch);
-
+export function itemSelection(ulTags) {
+  const itemIngredient = document.querySelectorAll(".li-tag");
+  setTimeout(() => {
+    // searchTag.value.length >= 3 &&
+    itemIngredient.forEach((el) => {
+      el.classList.add("li-tag-click");
+      el.addEventListener("click", function (e) {
+        if (!this.classList.contains("li-tag-active")) {
+          this.classList.add("li-tag-active");
+          ulTags.insertBefore(el, ulTags.firstChild);
+        }
+        dataFilterSearch(e);
+        const clonedItemSelection = el.cloneNode(true);
+        userSelection = clonedItemSelection;
+        // userSelectionIngredient.appendChild(clonedItemSelection);
+      });
+    });
+  }, 0);
+}
+itemSelection();
 // Fonction qui fait appel au DATA des recettes puis la boucle permet d'incrémenter le DOM par défault ou par filtres
 const sectionMedias = document.getElementById("section-media-id");
 export function mediaIncrement(values) {
