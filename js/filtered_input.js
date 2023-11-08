@@ -1,7 +1,7 @@
 import { mediaIncrement } from "./index.js";
 
 //Création d'un tableau "repiceSearch" des critères de recherches
-export function creationCriteriaTable(data, e, ingredients, repiceSearch) {
+export function creationCriteriaTable(e, data, ingredients, repiceSearch) {
   if (e !== undefined && e.target.getAttribute("name") === `main-search`) {
     const repiceName = data.map(function (obj) {
       const rObj = obj.name;
@@ -22,10 +22,11 @@ export function creationCriteriaTable(data, e, ingredients, repiceSearch) {
       })
       .flat();
 
+    ingredients = [...new Set(repiceIngredients)];
     repiceSearch = [
       ...repiceName,
       ...repiceDescription,
-      ...new Set(repiceIngredients),
+      ...new Set(ingredients),
     ];
     return { ingredients, repiceSearch };
   } else {
@@ -59,7 +60,7 @@ export function characterControlUser(e, repiceSearch) {
 const formSearch = document.getElementById("form-search-id");
 const spanSearch = document.getElementById("span-search-id");
 const paragraphSearch = document.getElementById("paragraph-search-id");
-export function validationCharacters(e, imputSearch, result) {
+export function validationCharacters(e, result, imputSearch) {
   const btnRemove = formSearch[1];
   if (result !== undefined && result.length === 0) {
     const regex = new RegExp(/([^‘]*)(?=\’)/);
@@ -87,16 +88,16 @@ export function validationCharacters(e, imputSearch, result) {
     paragraphSearch.setAttribute("data-error-visible", "false");
     btnRemove.classList.remove("btn-remove-delete");
     spanSearch.classList.remove("span-search-active");
-    return imputRemove(imputSearch);
+    return imputRemove(e, imputSearch);
   }
 }
 const btnRemove = document.getElementById("btn-remove-id");
 btnRemove.addEventListener("click", validationCharacters);
 
 // fonction qui supprime les caractères dans la barre de recherche
-function imputRemove(imputSearch) {
+function imputRemove(e, imputSearch) {
   return (
     (imputSearch === undefined || imputSearch.value.length === 0) &&
-    (formSearch.reset(), mediaIncrement())
+    (formSearch.reset(), mediaIncrement(e))
   );
 }

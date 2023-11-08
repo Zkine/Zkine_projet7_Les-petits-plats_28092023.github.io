@@ -6,6 +6,8 @@ const navTag = document.getElementById("nav-tag-id");
 const userSelectionIngredient = document.getElementById(
   "tag-selection-ingrédients"
 );
+
+const searchTag = document.getElementById("search-tag-id");
 let ingredients;
 let result;
 //Initialisation des critères de recherche
@@ -34,7 +36,11 @@ function tagRender(dataIngredients) {
       btnRemoveTag.className = "remove-tag";
       liTag.appendChild(btnRemoveTag);
     }
-  } else if (navTag.hasChildNodes() && dataIngredients.length !== 0) {
+  } else if (
+    navTag.hasChildNodes() &&
+    dataIngredients !== undefined &&
+    dataIngredients.length !== 0
+  ) {
     const liTag = document.querySelector(".li-tag");
     while (ulTag.hasChildNodes()) {
       ulTag.removeChild(ulTag.firstChild);
@@ -44,20 +50,18 @@ function tagRender(dataIngredients) {
       liTagClone.children[0].textContent = `${dataIngredients[i]}`;
       ulTag.appendChild(liTagClone);
     }
-    return itemSelection(ulTag);
+    return itemSelection(ulTag, userSelectionIngredient);
   }
 }
 
 //Recherche des critères de recherche dans la barre de recherche des tags
 function searchManagement(e) {
   btnRemoveTag.classList.add("btn-remove-tag-active");
-
   return (
     this.value.length >= 3 &&
     (({ result } = characterControlUser(e, ingredients)), tagRender(result))
   );
 }
-const searchTag = document.getElementById("search-tag-id");
 searchTag.addEventListener("input", searchManagement);
 
 let userSelection;
@@ -70,6 +74,7 @@ function tagData() {
   ) {
     this.classList.add("btn-tag-active");
   }
+
   return (
     userSelectionIngredient.hasChildNodes() &&
     userSelection.classList.add("tag-selection-remove")
@@ -88,25 +93,10 @@ function removeSearchTag() {
 btnRemoveTag.addEventListener("click", removeSearchTag);
 
 // Selection d'un ingredient
-// function itemSelection(ulTags) {
-//   const itemIngredient = document.querySelectorAll(".li-tag");
-//   setTimeout(() => {
-//     searchTag.value.length >= 3 &&
-//       itemIngredient.forEach((el) => {
-//         el.classList.add("li-tag-click");
-//         el.addEventListener("click", function () {
-//           if (!this.classList.contains("li-tag-active")) {
-//             this.classList.add("li-tag-active");
-//             ulTags.insertBefore(el, ulTags.firstChild);
-//           }
-//           const clonedItemSelection = el.cloneNode(true);
-//           userSelection = clonedItemSelection;
-//           userSelectionIngredient.appendChild(clonedItemSelection);
-//         });
-//       });
-//   }, 0);
-// }
-// itemSelection();
+export function itemSelectionClone(clonedItemSelection) {
+  userSelection = clonedItemSelection;
+  userSelectionIngredient.appendChild(clonedItemSelection);
+}
 
 // Le bouton se réinitialise lorsque le curseur sort du champ du bouton
 function tagLeave() {
