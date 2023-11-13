@@ -1,5 +1,4 @@
 import { characterControlUser } from "./filtered_input.js";
-import { itemSelection } from "./index.js";
 
 const btnRemoveTag = document.getElementById("btn-remove-tag-id");
 const navTag = document.getElementById("nav-tag-id");
@@ -8,16 +7,44 @@ const userSelectionIngredient = document.getElementById(
 );
 
 const searchTag = document.getElementById("search-tag-id");
-let ingredients;
-let result;
 //Initialisation des critères de recherche
-export function arrayInitialization(dataIngredients) {
-  ingredients = dataIngredients;
-  tagRender(dataIngredients);
+let ingredient;
+let newUlTag;
+
+// Mise à jour des ingrédients selon les caractères saisis de l'utilisateur
+export function uptadeTags(e, data) {
+  if (e.target !== undefined && e.target.nodeName === "DIV") {
+    ingredient = data;
+    tagRender(ingredient);
+  } else {
+    const { result } = characterControlUser(e, ingredient);
+    tagRender(result);
+  }
 }
+
+// Fonction qui met à jour la liste des tags non sélectionnés
+function filterArray(dataIngredients, liTag) {
+  const value = dataIngredients.filter(
+    (el) => !liTag.some((item) => item === el)
+  );
+  return { value };
+}
+
+// Supprime les tags
+function removeTag(btnRemoveTags) {
+  for (let el = 0; el < btnRemoveTags.length; el++) {
+    btnRemoveTags[el].addEventListener("click", function (e) {
+      btnRemoveTags[el].remove();
+      console.log(e);
+    });
+  }
+}
+
+let liTagClone;
 // Création du DOM des div tag - ingrédients, les ustensiles ou les appareils.
 function tagRender(dataIngredients) {
-  const ulTag = document.querySelector(".ul-tag");
+  const tagUl = navTag.getElementsByClassName("ul-tag");
+  newUlTag = tagUl[0];
   if (!navTag.hasChildNodes()) {
     const ulTag = document.createElement("ul");
     ulTag.className = "ul-tag";
@@ -32,79 +59,114 @@ function tagRender(dataIngredients) {
       pTag.textContent = `${dataIngredients[i]}`;
       liTag.appendChild(pTag);
 
-      const btnRemoveTag = document.createElement("button");
-      btnRemoveTag.className = "remove-tag";
-      liTag.appendChild(btnRemoveTag);
+      const btnRemoveTags = document.createElement("button");
+      btnRemoveTags.className = "remove-tag";
+      liTag.appendChild(btnRemoveTags);
     }
-  } else if (
-    navTag.hasChildNodes() &&
-    dataIngredients !== undefined &&
-    dataIngredients.length !== 0
-  ) {
-    const liTag = document.querySelector(".li-tag");
-    while (ulTag.hasChildNodes()) {
-      ulTag.removeChild(ulTag.firstChild);
+    liTagClone = tagUl[0].lastChild.cloneNode(true);
+  } else if (navTag.hasChildNodes()) {
+    const liTags = document.getElementsByClassName("li-tag");
+
+    let liTag = [];
+    for (let e = liTags.length - 1; e >= 0; e--) {
+      if (!liTags[e].classList.contains("li-tag-active")) {
+        newUlTag.removeChild(liTags[e]);
+      } else if (
+        liTags[e].classList.contains("li-tag-active") &&
+        liTag.indexOf(liTags[e].textContent) === -1
+      ) {
+        liTag.push(liTags[e].textContent);
+      }
     }
-    for (let i = 0; i < dataIngredients.length; i++) {
-      let liTagClone = liTag.cloneNode(true);
-      liTagClone.children[0].textContent = `${dataIngredients[i]}`;
-      ulTag.appendChild(liTagClone);
+    if (liTag.length > 0) {
+      const { value } = filterArray(dataIngredients, liTag);
+      for (let i = 0; i < value.length; i++) {
+        const liTagClones = liTagClone.cloneNode(true);
+        liTagClones.children[0].textContent = `${value[i]}`;
+        newUlTag.appendChild(liTagClones);
+      }
+    } else {
+      for (let i = 0; i < dataIngredients.length; i++) {
+        const liTagClones = liTagClone.cloneNode(true);
+        liTagClones.children[0].textContent = `${dataIngredients[i]}`;
+        newUlTag.appendChild(liTagClones);
+      }
     }
-    return itemSelection(ulTag, userSelectionIngredient);
+
+    const btnRemoveTags = document.querySelectorAll(
+      ".li-tag-active>.remove-tag"
+    );
+    return btnRemoveTags.length >= 1 && removeTag(btnRemoveTags);
   }
+}
+
+let userSelection;
+let btnIngredient;
+// fonction qui gère extension des boutons
+export function tagData(e, ingredient) {
+  btnIngredient = ingredient;
+  if (
+    e !== undefined &&
+    e.target.classList.contains("btn-tag") &&
+    !e.target.classList.contains("btn-tag-active")
+  ) {
+    e.target.classList.add("btn-tag-active");
+  }
+
+  leaveTag();
+  searchManagement();
+  return { searchTag };
 }
 
 //Recherche des critères de recherche dans la barre de recherche des tags
 function searchManagement(e) {
-  btnRemoveTag.classList.add("btn-remove-tag-active");
-  return (
-    this.value.length >= 3 &&
-    (({ result } = characterControlUser(e, ingredients)), tagRender(result))
-  );
+  const itemIngredient = document.getElementsByClassName("li-tag");
+  if (searchTag.value.length >= 3) {
+    uptadeTags(e, ingredient);
+    btnRemoveTag.classList.add("btn-remove-tag-active");
+    for (let el = 0; el < itemIngredient.length; el++) {
+      itemIngredient[el].classList.add("li-tag-click");
+      itemIngredient[el].addEventListener("click", function () {
+        const liTagsActive = document.querySelectorAll(
+          ".ul-tag .li-tag-active"
+        );
+        itemIngredient[el].classList.add("li-tag-active");
+        userSelection = itemIngredient[el].cloneNode(true);
+        if (liTagsActive.length === 0) {
+          newUlTag.insertBefore(itemIngredient[el], newUlTag.firstChild);
+        } else {
+          for (let e = liTagsActive.length - 1; e >= 0; e--) {
+            newUlTag.insertBefore(
+              itemIngredient[el],
+              liTagsActive[e].nextSibling
+            );
+            break;
+          }
+        }
+        userSelectionIngredient.appendChild(userSelection);
+      });
+    }
+  }
 }
 searchTag.addEventListener("input", searchManagement);
 
-let userSelection;
-// fonction qui gère extension des boutons
-function tagData() {
-  if (
-    this !== undefined &&
-    this.classList.contains("btn-tag") &&
-    !this.classList.contains("btn-tag-active")
-  ) {
-    this.classList.add("btn-tag-active");
-  }
-
-  return (
-    userSelectionIngredient.hasChildNodes() &&
-    userSelection.classList.add("tag-selection-remove")
-  );
-}
-const btnIngredient = document.getElementById("btn-ingredient-id");
-btnIngredient.addEventListener("click", tagData);
-
 // Supprime les caractères de input
 function removeSearchTag() {
+  const formTag = document.getElementById("form-tag-id");
   btnRemoveTag.classList.contains("btn-remove-tag-active") &&
     btnRemoveTag.classList.remove("btn-remove-tag-active");
-  const formTag = document.getElementById("form-tag-id");
+  tagRender(ingredient);
   return formTag.reset();
 }
 btnRemoveTag.addEventListener("click", removeSearchTag);
 
-// Selection d'un ingredient
-export function itemSelectionClone(clonedItemSelection) {
-  userSelection = clonedItemSelection;
-  userSelectionIngredient.appendChild(clonedItemSelection);
-}
-
 // Le bouton se réinitialise lorsque le curseur sort du champ du bouton
-function tagLeave() {
-  if (this.classList.contains("btn-tag-active")) {
-    this.classList.remove("btn-tag-active");
-    userSelectionIngredient.hasChildNodes() &&
-      userSelection.classList.remove("tag-selection-remove");
-    return removeSearchTag();
-  }
+function leaveTag() {
+  btnIngredient !== undefined &&
+    btnIngredient.addEventListener("mouseleave", function () {
+      if (this.classList.contains("btn-tag-active")) {
+        this.classList.remove("btn-tag-active");
+        return removeSearchTag();
+      }
+    });
 }
-btnIngredient.addEventListener("mouseleave", tagLeave);

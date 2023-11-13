@@ -68,7 +68,7 @@ export function renderMedia(value) {
         ? `${element.quantity}`
         : `${element.quantity}` === "undefined" &&
           `${element.unit}` === "undefined" &&
-          null;
+          {};
 
     `${element.quantity}` !== "undefined" && divTitre.appendChild(quantite);
   }
