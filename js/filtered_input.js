@@ -98,6 +98,6 @@ btnRemove.addEventListener("click", validationCharacters);
 function imputRemove(e, imputSearch) {
   return (
     (imputSearch === undefined || imputSearch.value.length === 0) &&
-    (formSearch.reset(), mediaIncrement(e))
+    (formSearch.reset(), mediaIncrement())
   );
 }

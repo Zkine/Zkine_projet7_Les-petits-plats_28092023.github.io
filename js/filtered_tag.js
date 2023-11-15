@@ -5,15 +5,15 @@ const navTag = document.getElementById("nav-tag-id");
 const userSelectionIngredient = document.getElementById(
   "tag-selection-ingrédients"
 );
-
 const searchTag = document.getElementById("search-tag-id");
-//Initialisation des critères de recherche
+
+//Initialisation des critères de recherche.
 let ingredient;
 let newUlTag;
 
-// Mise à jour des ingrédients selon les caractères saisis de l'utilisateur
+//A la selection d'un tag après la selection de l'utilisateur, .
 export function uptadeTags(e, data) {
-  if (e.target !== undefined && e.target.nodeName === "DIV") {
+  if (e === undefined || e.target.nodeName === "DIV") {
     ingredient = data;
     tagRender(ingredient);
   } else {
@@ -22,7 +22,8 @@ export function uptadeTags(e, data) {
   }
 }
 
-// Fonction qui met à jour la liste des tags non sélectionnés
+// Cette fonction met à jour la liste des tags non sélectionnés.
+let liTag = [];
 function filterArray(dataIngredients, liTag) {
   const value = dataIngredients.filter(
     (el) => !liTag.some((item) => item === el)
@@ -30,16 +31,38 @@ function filterArray(dataIngredients, liTag) {
   return { value };
 }
 
-// Supprime les tags
-function removeTag(btnRemoveTags) {
-  for (let el = 0; el < btnRemoveTags.length; el++) {
-    btnRemoveTags[el].addEventListener("click", function (e) {
-      btnRemoveTags[el].remove();
-      console.log(e);
-    });
-  }
+// Cette fonction supprime les tags
+function removeTag() {
+  setTimeout(function () {
+    const btnRemoveTags = document.querySelectorAll(
+      ".li-tag-active>.remove-tag"
+    );
+    if (btnRemoveTags.length > 0) {
+      for (let r = 0; r < btnRemoveTags.length; r++) {
+        btnRemoveTags[r].addEventListener("click", function (e) {
+          const sectionTags = btnRemoveTags[r].closest("#section-tag-id");
+          if (sectionTags !== null) {
+            const liTags = sectionTags.getElementsByClassName("li-tag-active");
+            for (let i = 0; i < liTags.length; i++) {
+              while (
+                liTags[i] !== undefined &&
+                btnRemoveTags[r].parentNode.textContent ===
+                  liTags[i].textContent
+              ) {
+                liTags[i].remove();
+              }
+              liTag.splice(
+                liTag.indexOf(btnRemoveTags[r].parentNode.textContent),
+                1
+              );
+            }
+            return tagRender(ingredient);
+          }
+        });
+      }
+    }
+  }, 0);
 }
-
 let liTagClone;
 // Création du DOM des div tag - ingrédients, les ustensiles ou les appareils.
 function tagRender(dataIngredients) {
@@ -63,11 +86,12 @@ function tagRender(dataIngredients) {
       btnRemoveTags.className = "remove-tag";
       liTag.appendChild(btnRemoveTags);
     }
-    liTagClone = tagUl[0].lastChild.cloneNode(true);
+
+    newUlTag = tagUl[0];
+    liTagClone = newUlTag.lastChild.cloneNode(true);
   } else if (navTag.hasChildNodes()) {
     const liTags = document.getElementsByClassName("li-tag");
 
-    let liTag = [];
     for (let e = liTags.length - 1; e >= 0; e--) {
       if (!liTags[e].classList.contains("li-tag-active")) {
         newUlTag.removeChild(liTags[e]);
@@ -92,11 +116,7 @@ function tagRender(dataIngredients) {
         newUlTag.appendChild(liTagClones);
       }
     }
-
-    const btnRemoveTags = document.querySelectorAll(
-      ".li-tag-active>.remove-tag"
-    );
-    return btnRemoveTags.length >= 1 && removeTag(btnRemoveTags);
+    return removeTag();
   }
 }
 
@@ -112,43 +132,56 @@ export function tagData(e, ingredient) {
   ) {
     e.target.classList.add("btn-tag-active");
   }
-
-  leaveTag();
-  searchManagement();
-  return { searchTag };
+  tagSelection();
+  return leaveTag();
 }
 
 //Recherche des critères de recherche dans la barre de recherche des tags
 function searchManagement(e) {
-  const itemIngredient = document.getElementsByClassName("li-tag");
-  if (searchTag.value.length >= 3) {
-    uptadeTags(e, ingredient);
+  if (this.value.length !== 0) {
     btnRemoveTag.classList.add("btn-remove-tag-active");
-    for (let el = 0; el < itemIngredient.length; el++) {
-      itemIngredient[el].classList.add("li-tag-click");
-      itemIngredient[el].addEventListener("click", function () {
-        const liTagsActive = document.querySelectorAll(
-          ".ul-tag .li-tag-active"
-        );
-        itemIngredient[el].classList.add("li-tag-active");
-        userSelection = itemIngredient[el].cloneNode(true);
-        if (liTagsActive.length === 0) {
-          newUlTag.insertBefore(itemIngredient[el], newUlTag.firstChild);
-        } else {
-          for (let e = liTagsActive.length - 1; e >= 0; e--) {
-            newUlTag.insertBefore(
-              itemIngredient[el],
-              liTagsActive[e].nextSibling
-            );
-            break;
-          }
-        }
-        userSelectionIngredient.appendChild(userSelection);
-      });
-    }
+  } else {
+    btnRemoveTag.classList.remove("btn-remove-tag-active");
   }
+  uptadeTags(e, ingredient);
+  return tagSelection();
 }
 searchTag.addEventListener("input", searchManagement);
+
+// Selection d'un tag
+function tagSelection() {
+  setTimeout(function () {
+    const itemIngredient = document.getElementsByClassName("li-tag");
+    for (let el = 0; el < itemIngredient.length; el++) {
+      itemIngredient[el].addEventListener("click", function (e) {
+        if (
+          itemIngredient[el] !== undefined &&
+          !itemIngredient[el].classList.contains("li-tag-active") &&
+          e.target.nodeName === "P"
+        ) {
+          const liTagsActive = document.querySelectorAll(
+            ".ul-tag .li-tag-active"
+          );
+          itemIngredient[el].classList.add("li-tag-active");
+          userSelection = itemIngredient[el].cloneNode(true);
+          if (liTagsActive.length === 0) {
+            newUlTag.insertBefore(itemIngredient[el], newUlTag.firstChild);
+          } else {
+            for (let e = liTagsActive.length - 1; e >= 0; e--) {
+              newUlTag.insertBefore(
+                itemIngredient[el],
+                liTagsActive[e].nextSibling
+              );
+              break;
+            }
+          }
+          userSelectionIngredient.appendChild(userSelection);
+          return tagRender(ingredient);
+        }
+      });
+    }
+  }, 0);
+}
 
 // Supprime les caractères de input
 function removeSearchTag() {
@@ -160,7 +193,7 @@ function removeSearchTag() {
 }
 btnRemoveTag.addEventListener("click", removeSearchTag);
 
-// Le bouton se réinitialise lorsque le curseur sort du champ du bouton
+// La div se réinitialise lorsque le curseur sort du champ des tags
 function leaveTag() {
   btnIngredient !== undefined &&
     btnIngredient.addEventListener("mouseleave", function () {
