@@ -28,11 +28,10 @@ export function dataFilterSearch(e, data, imputSearch, btnIngredient) {
     result !== undefined && result.length >= 1
       ? result.push(e.target.textContent)
       : (result = new Array(e.target.textContent));
+  } else if (e.target.nodeName === "BUTTON") {
+    // result.splice(result.indexOf(e.target.parentNode.textContent), 1);
+    tagData(e, btnIngredient);
   }
-
-  // else if (e.target.nodeName === "BUTTON") {
-  //   result.splice(result.indexOf(e.target.parentNode.textContent), 1);
-  // }
   // console.log(result);
   if (result === undefined || result.length === 0) {
     return {};

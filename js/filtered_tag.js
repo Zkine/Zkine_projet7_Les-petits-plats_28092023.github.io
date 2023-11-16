@@ -15,10 +15,10 @@ let newUlTag;
 export function uptadeTags(e, data) {
   if (e === undefined || e.target.nodeName === "DIV") {
     ingredient = data;
-    tagRender(ingredient);
+    tagRender(e, ingredient);
   } else {
     const { result } = characterControlUser(e, ingredient);
-    tagRender(result);
+    tagRender(e, result);
   }
 }
 
@@ -59,8 +59,7 @@ function removeTag() {
                   1
                 );
               }
-              tagData();
-              return tagRender(ingredient);
+              return tagRender(e, ingredient);
             }
           },
           { once: true }
@@ -71,7 +70,7 @@ function removeTag() {
 }
 let liTagClone;
 // Création du DOM des div tag - ingrédients, les ustensiles ou les appareils.
-function tagRender(dataIngredients) {
+function tagRender(e, dataIngredients) {
   const tagUl = navTag.getElementsByClassName("ul-tag");
   newUlTag = tagUl[0];
   if (!navTag.hasChildNodes()) {
@@ -122,6 +121,7 @@ function tagRender(dataIngredients) {
         newUlTag.appendChild(liTagClones);
       }
     }
+    return e !== undefined && e.target.nodeName === "BUTTON" && removeTag();
   }
 }
 
@@ -138,11 +138,10 @@ export function tagData(e, ingredient) {
     e.target.classList.add("btn-tag-active");
   }
 
+  tagSelection();
+
   removeTag();
-  return (e.target.classList.contains("btn-tag-active") && e !== undefined)(
-    tagSelection(),
-    leaveTag()
-  );
+  leaveTag();
 }
 
 //Recherche des critères de recherche dans la barre de recherche des tags
@@ -187,7 +186,7 @@ function tagSelection() {
               }
             }
             userSelectionIngredient.appendChild(userSelection);
-            tagRender(ingredient);
+            tagRender(e, ingredient);
           }
         },
         { once: true }
@@ -197,11 +196,11 @@ function tagSelection() {
 }
 
 // Supprime les caractères de input
-function removeSearchTag() {
+function removeSearchTag(e) {
   const formTag = document.getElementById("form-tag-id");
   btnRemoveTag.classList.contains("btn-remove-tag-active") &&
     btnRemoveTag.classList.remove("btn-remove-tag-active");
-  tagRender(ingredient);
+  tagRender(e, ingredient);
   return formTag.reset();
 }
 btnRemoveTag.addEventListener("click", removeSearchTag);
