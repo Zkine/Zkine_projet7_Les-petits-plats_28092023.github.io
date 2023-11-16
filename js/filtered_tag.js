@@ -22,7 +22,7 @@ export function uptadeTags(e, data) {
   }
 }
 
-// Cette fonction met à jour la liste des tags non sélectionnés.
+// Fonction qui met à jour la liste des tags non sélectionnés.
 let liTag = [];
 function filterArray(dataIngredients, liTag) {
   const value = dataIngredients.filter(
@@ -31,7 +31,7 @@ function filterArray(dataIngredients, liTag) {
   return { value };
 }
 
-// Cette fonction supprime les tags
+// Fonction qui supprime les tags
 function removeTag() {
   setTimeout(function () {
     const btnRemoveTags = document.querySelectorAll(
@@ -39,26 +39,32 @@ function removeTag() {
     );
     if (btnRemoveTags.length > 0) {
       for (let r = 0; r < btnRemoveTags.length; r++) {
-        btnRemoveTags[r].addEventListener("click", function (e) {
-          const sectionTags = btnRemoveTags[r].closest("#section-tag-id");
-          if (sectionTags !== null) {
-            const liTags = sectionTags.getElementsByClassName("li-tag-active");
-            for (let i = 0; i < liTags.length; i++) {
-              while (
-                liTags[i] !== undefined &&
-                btnRemoveTags[r].parentNode.textContent ===
-                  liTags[i].textContent
-              ) {
-                liTags[i].remove();
+        btnRemoveTags[r].addEventListener(
+          "click",
+          function (e) {
+            const sectionTags = btnRemoveTags[r].closest("#section-tag-id");
+            if (sectionTags !== null) {
+              const liTags =
+                sectionTags.getElementsByClassName("li-tag-active");
+              for (let i = 0; i < liTags.length; i++) {
+                while (
+                  liTags[i] !== undefined &&
+                  btnRemoveTags[r].parentNode.textContent ===
+                    liTags[i].textContent
+                ) {
+                  liTags[i].remove();
+                }
+                liTag.splice(
+                  liTag.indexOf(btnRemoveTags[r].parentNode.textContent),
+                  1
+                );
               }
-              liTag.splice(
-                liTag.indexOf(btnRemoveTags[r].parentNode.textContent),
-                1
-              );
+              tagData();
+              return tagRender(ingredient);
             }
-            return tagRender(ingredient);
-          }
-        });
+          },
+          { once: true }
+        );
       }
     }
   }, 0);
@@ -116,13 +122,12 @@ function tagRender(dataIngredients) {
         newUlTag.appendChild(liTagClones);
       }
     }
-    return removeTag();
   }
 }
 
 let userSelection;
 let btnIngredient;
-// fonction qui gère extension des boutons
+// fonction qui gère extension des tags
 export function tagData(e, ingredient) {
   btnIngredient = ingredient;
   if (
@@ -132,8 +137,12 @@ export function tagData(e, ingredient) {
   ) {
     e.target.classList.add("btn-tag-active");
   }
-  tagSelection();
-  return leaveTag();
+
+  removeTag();
+  return (e.target.classList.contains("btn-tag-active") && e !== undefined)(
+    tagSelection(),
+    leaveTag()
+  );
 }
 
 //Recherche des critères de recherche dans la barre de recherche des tags
@@ -153,32 +162,36 @@ function tagSelection() {
   setTimeout(function () {
     const itemIngredient = document.getElementsByClassName("li-tag");
     for (let el = 0; el < itemIngredient.length; el++) {
-      itemIngredient[el].addEventListener("click", function (e) {
-        if (
-          itemIngredient[el] !== undefined &&
-          !itemIngredient[el].classList.contains("li-tag-active") &&
-          e.target.nodeName === "P"
-        ) {
-          const liTagsActive = document.querySelectorAll(
-            ".ul-tag .li-tag-active"
-          );
-          itemIngredient[el].classList.add("li-tag-active");
-          userSelection = itemIngredient[el].cloneNode(true);
-          if (liTagsActive.length === 0) {
-            newUlTag.insertBefore(itemIngredient[el], newUlTag.firstChild);
-          } else {
-            for (let e = liTagsActive.length - 1; e >= 0; e--) {
-              newUlTag.insertBefore(
-                itemIngredient[el],
-                liTagsActive[e].nextSibling
-              );
-              break;
+      itemIngredient[el].addEventListener(
+        "click",
+        function (e) {
+          if (
+            itemIngredient[el] !== undefined &&
+            !itemIngredient[el].classList.contains("li-tag-active") &&
+            e.target.nodeName === "P"
+          ) {
+            const liTagsActive = document.querySelectorAll(
+              ".ul-tag .li-tag-active"
+            );
+            itemIngredient[el].classList.add("li-tag-active");
+            userSelection = itemIngredient[el].cloneNode(true);
+            if (liTagsActive.length === 0) {
+              newUlTag.insertBefore(itemIngredient[el], newUlTag.firstChild);
+            } else {
+              for (let e = liTagsActive.length - 1; e >= 0; e--) {
+                newUlTag.insertBefore(
+                  itemIngredient[el],
+                  liTagsActive[e].nextSibling
+                );
+                break;
+              }
             }
+            userSelectionIngredient.appendChild(userSelection);
+            tagRender(ingredient);
           }
-          userSelectionIngredient.appendChild(userSelection);
-          return tagRender(ingredient);
-        }
-      });
+        },
+        { once: true }
+      );
     }
   }, 0);
 }

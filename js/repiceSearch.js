@@ -10,7 +10,7 @@ let value;
 
 // Fonction qui recherche les recettes dans les données data selon le resultat renvoyé par la fonction characterControlUser et crée un tableau nommé values
 export function dataFilterSearch(e, data, imputSearch, btnIngredient) {
-  result = [];
+  // result = [];
   if (
     e.target.getAttribute("name") === "main-search" &&
     e.target.value.length < 3
