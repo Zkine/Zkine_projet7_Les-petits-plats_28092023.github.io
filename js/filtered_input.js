@@ -47,22 +47,25 @@ export function creationCriteriaTable(e, data, ingredients, repiceSearch) {
 //Fonction qui filtrer le contenu du tableau des critères de recherche - fonction creationCriteriaTable - selon les données saisies par l'utilisateur
 //et crée un tableau : constante result.
 export function characterControlUser(e, repiceSearch) {
-  const result = repiceSearch.filter(function (el) {
+  repiceSearch !== undefined &&
+    e.target.value === undefined &&
+    (e.target.value = e.target.textContent);
+  const resultControl = repiceSearch.filter(function (el) {
     return (
       JSON.stringify(el).toLowerCase().indexOf(e.target.value.toLowerCase()) !==
       -1
     );
   });
-  return { result };
+  return { resultControl };
 }
 
 //Fonction qui indique à l'utilisateur si au moins trois lettres saisies correspondent aux critères de recherche
 const formSearch = document.getElementById("form-search-id");
 const spanSearch = document.getElementById("span-search-id");
 const paragraphSearch = document.getElementById("paragraph-search-id");
-export function validationCharacters(e, result, imputSearch) {
+export function validationCharacters(e, resultMainSearch, imputSearch) {
   const btnRemove = formSearch[1];
-  if (result !== undefined && result.length === 0) {
+  if (resultMainSearch !== undefined && resultMainSearch.length === 0) {
     const regex = new RegExp(/([^‘]*)(?=\’)/);
     const characterInput = paragraphSearch
       .getAttribute("data-error")
@@ -74,8 +77,8 @@ export function validationCharacters(e, result, imputSearch) {
     btnRemove.classList.add("btn-remove-delete");
     return {};
   } else if (
-    result !== undefined &&
-    result.length !== 0 &&
+    resultMainSearch !== undefined &&
+    resultMainSearch.length !== 0 &&
     imputSearch.value.length >= 3
   ) {
     paragraphSearch.setAttribute("data-error-visible", "false");
@@ -83,7 +86,7 @@ export function validationCharacters(e, result, imputSearch) {
       btnRemove.classList.add("btn-remove-delete");
     spanSearch.classList.contains("span-search-active") &&
       spanSearch.classList.remove("span-search-active");
-    return { result };
+    return { resultMainSearch };
   } else {
     paragraphSearch.setAttribute("data-error-visible", "false");
     btnRemove.classList.remove("btn-remove-delete");
@@ -95,9 +98,9 @@ const btnRemove = document.getElementById("btn-remove-id");
 btnRemove.addEventListener("click", validationCharacters);
 
 // fonction qui supprime les caractères dans la barre de recherche
-function imputRemove(e, imputSearch) {
-  return (
-    (imputSearch === undefined || imputSearch.value.length === 0) &&
-    (formSearch.reset(), mediaIncrement())
-  );
+export function imputRemove(e, imputSearch) {
+  return (imputSearch === undefined || imputSearch.value.length === 0) &&
+    e.target.getAttribute("class") !== "remove-tag"
+    ? (formSearch.reset(), mediaIncrement(e))
+    : mediaIncrement(e);
 }

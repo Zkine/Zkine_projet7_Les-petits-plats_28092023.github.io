@@ -2,20 +2,30 @@ import data from "../data/recipes.js";
 import { renderMedia, numberOfRecipes } from "./recipe.js";
 import { dataFilterSearch } from "./repiceSearch.js";
 import { creationCriteriaTable } from "./filtered_input.js";
-import { uptadeTags } from "./filtered_tag.js";
+import { uptadeTags, tagData } from "./filtered_tag.js";
 // Fonction qui fait appel au DATA des recettes puis la boucle permet d'incrémenter le DOM par défault ou par filtres
 
 const sectionMedias = document.getElementById("section-media-id");
+const ingredientSelection = document.getElementById(
+  "tag-selection-ingrédients"
+);
 let values;
-let ingredients;
 export function mediaIncrement(e) {
-  if (e === undefined || e.target.getAttribute("id") === "btn-remove-id") {
+  if (
+    imputSearch.value === "" &&
+    !ingredientSelection.hasChildNodes() &&
+    e === undefined
+  ) {
     values = data;
-    ({ ingredients } = creationCriteriaTable(e, values));
+    const { ingredients } = creationCriteriaTable(e, values);
     uptadeTags(e, ingredients);
   } else {
-    const { value } = dataFilterSearch(e, values, imputSearch, btnIngredient);
+    const { value } = dataFilterSearch(e, values, imputSearch);
     value !== undefined && (values = value);
+    if (e.target.getAttribute("class") !== "remove-tag") {
+      const { ingredients } = creationCriteriaTable(e, values);
+      uptadeTags(e, ingredients);
+    }
   }
   while (sectionMedias.hasChildNodes()) {
     sectionMedias.removeChild(sectionMedias.firstChild);
@@ -25,6 +35,7 @@ export function mediaIncrement(e) {
     renderMedia(values[i]);
   }
   numberOfRecipes();
+  e !== undefined && tagData(e, btnIngredient);
 }
 const imputSearch = document.getElementById("site-search");
 imputSearch.addEventListener("input", mediaIncrement);
