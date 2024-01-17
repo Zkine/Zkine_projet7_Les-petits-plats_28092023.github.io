@@ -63,7 +63,7 @@ export function characterControlUser(e, repiceSearch) {
 const formSearch = document.getElementById("form-search-id");
 const spanSearch = document.getElementById("span-search-id");
 const paragraphSearch = document.getElementById("paragraph-search-id");
-export function validationCharacters(e, resultMainSearch, imputSearch) {
+export function validationCharacters(e, resultMainSearch) {
   const btnRemove = formSearch[1];
   if (resultMainSearch !== undefined && resultMainSearch.length === 0) {
     const regex = new RegExp(/([^‘]*)(?=\’)/);
@@ -79,7 +79,7 @@ export function validationCharacters(e, resultMainSearch, imputSearch) {
   } else if (
     resultMainSearch !== undefined &&
     resultMainSearch.length !== 0 &&
-    imputSearch.value.length >= 3
+    e.target.value.length >= 3
   ) {
     paragraphSearch.setAttribute("data-error-visible", "false");
     !btnRemove.classList.contains("btn-remove-delete") &&
@@ -91,16 +91,46 @@ export function validationCharacters(e, resultMainSearch, imputSearch) {
     paragraphSearch.setAttribute("data-error-visible", "false");
     btnRemove.classList.remove("btn-remove-delete");
     spanSearch.classList.remove("span-search-active");
-    return imputRemove(e, imputSearch);
+    if (
+      e.code !== "Backspace" &&
+      e.code !== "Delete" &&
+      e.target.value.length <= 2 &&
+      e.target.attributes[0].textContent !== "button"
+    ) {
+      return {};
+    }
+    return imputRemove(e);
   }
 }
 const btnRemove = document.getElementById("btn-remove-id");
 btnRemove.addEventListener("click", validationCharacters);
 
+const input = document.getElementById("site-search");
+
+// Ecoute sur l'imput pincipal qui permet de sélectionner les caractères que l'utilisateur met en surbrillance en maintenant le clique droit
+// let selectedText;
+// input.addEventListener("mouseup", (e) => {
+//   e.stopPropagation();
+//   selectedText = document.activeElement.value.substring(
+//     document.activeElement.selectionStart,
+//     document.activeElement.selectionEnd
+//   );
+// });
+// input.addEventListener("keydown", (e) => {
+//   e.stopPropagation();
+//   if (
+//     ((e.code === "Backspace" || e.code === "Delete") &&
+//       selectedText.length === input.value.length) ||
+//     ((e.code === "Backspace" || e.code === "Delete") &&
+//       input.value.length === 1)
+//   ) {
+//     input.value = "";
+//     return validationCharacters(e);
+//   }
+//   return {};
+// });
+
 // fonction qui supprime les caractères dans la barre de recherche
-export function imputRemove(e, imputSearch) {
-  return (imputSearch === undefined || imputSearch.value.length === 0) &&
-    e.target.getAttribute("class") !== "remove-tag"
-    ? (formSearch.reset(), mediaIncrement(e))
-    : mediaIncrement(e);
+export function imputRemove(e) {
+  return e.target.value === "" && (formSearch.reset(), mediaIncrement(e));
 }

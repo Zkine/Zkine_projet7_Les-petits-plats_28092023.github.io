@@ -99,14 +99,15 @@
 
 .btn-remove {
     position: absolute;
-    width: 25px;
-    height: 25px;
-    top: 25px;
-    left: 856px;
-    cursor: pointer;
     background: rgba(0, 0, 0, 0);
+    opacity: 0;
     border: none;
-    display: none;
+    clip-path: rect(0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    width: 1px;
 }
 
 .btn-remove::after {
@@ -124,7 +125,13 @@
 }
 
 .btn-remove-delete {
-    display: block;
+    width: 25px;
+    height: 25px;
+    top: 25px;
+    left: 856px;
+    cursor: pointer;
+    opacity: 1;
+    clip-path: rect(100%);
 }
 
 .span-search {
@@ -143,7 +150,7 @@
 .fa-magnifying-glass {
     position: absolute;
     font-size: 1.688em;
-    top: 20%;
+    top: 25%;
     right: 25%;
 }
 
@@ -162,23 +169,24 @@
 .div-tag {
     display: flex;
     gap: 63px;
-    align-items: center;
+    align-items: flex-start;
     height: 56px;
 }
 
 .btn-tag {
+    position: relative;
     width: 195px;
     height: 56px;
     /* height: 315px; */
     border-radius: 11px;
     background-color: #ffffff;
     border: none;
-    position: relative;
     display: flex;
     flex-direction: column;
     z-index: 1;
     color: #1B1B1B;
     overflow: hidden;
+    transition: height 300ms linear;
 }
 
 .btn-tag::after {
@@ -190,18 +198,14 @@
     cursor: pointer;
     top: 0;
     left: 0;
+    z-index: 1;
 }
 
 .btn-tag-active {
     height: 315px;
     overflow: hidden;
-    top: 129px;
     cursor: default;
 }
-
-/* .btn-tag .btn-tag-active {
-    transition: max-height 300ms ease-out;
-} */
 
 .titre-btn {
     font-size: 1em;
@@ -218,6 +222,7 @@
     position: absolute;
     right: 15px;
     top: 5px;
+    animation: arrow_down 300ms ease-out both;
 }
 
 .titre-btn::before {
@@ -234,21 +239,20 @@
     cursor: default;
 }
 
-.tag-search::-webkit-search-cancel-button {
-    opacity: 0;
+.form-tag {
+    transition: opacity 300ms;
 }
 
 .btn-tag>.form-tag {
-    display: none;
-    /* display: block; */
+    opacity: 0
 }
 
 .btn-tag-active>.titre-btn::after {
-    transform: rotate(180deg);
+    animation: arrow_up 300ms ease-out both;
 }
 
 .btn-tag-active>.form-tag {
-    display: inline-block;
+    opacity: 1
 }
 
 .tag-search {
@@ -264,15 +268,21 @@
     margin-left: 15px;
 }
 
+.tag-search::-webkit-search-cancel-button {
+    opacity: 0;
+}
+
 .btn-remove-tag {
     position: absolute;
-    top: 62px;
-    right: 48px;
-    border: none;
     background: rgba(0, 0, 0, 0);
-    height: 10px;
-    width: 10px;
-    display: none;
+    opacity: 0;
+    border: none;
+    clip-path: rect(0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    width: 1px;
 }
 
 .btn-remove-tag::after {
@@ -293,7 +303,12 @@
 }
 
 .btn-remove-tag-active {
-    display: block;
+    opacity: 1;
+    height: 10px;
+    width: 10px;
+    top: 62px;
+    right: 48px;
+    clip-path: rect(100%);
 }
 
 .span-search-tag {
@@ -338,8 +353,6 @@
     cursor: pointer;
 }
 
-
-
 .li-tag-active {
     width: 195px;
     height: 37px;
@@ -357,17 +370,25 @@
 }
 
 .remove-tag {
-    display: none;
-    position: relative;
+    opacity: 0;
     right: 15px;
     background: rgba(0, 0, 0, 0);
     border: none;
-    width: 15px;
-    height: 15px;
+    clip-path: rect(0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
 }
 
 .li-tag-active:hover .remove-tag {
-    display: block;
+    opacity: 1;
+    width: 15px;
+    height: 15px;
+    clip-path: rect(100%);
+    overflow: visible;
 }
 
 .remove-tag::after {
@@ -406,7 +427,6 @@
 
 .tag-selection .remove-tag,
 .tag-selection .remove-tag::after {
-    display: block;
     content: "\f00d";
 }
 
@@ -513,4 +533,24 @@
     font-size: 0.75em;
     font-weight: 400;
     line-height: 16.39px;
+}
+
+@keyframes arrow_up {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(-180deg)
+    }
+}
+
+@keyframes arrow_down {
+    from {
+        transform: rotate(-180deg);
+    }
+
+    to {
+        transform: rotate(0deg)
+    }
 }
