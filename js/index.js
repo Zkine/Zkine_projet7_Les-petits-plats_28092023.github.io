@@ -13,38 +13,27 @@ let values;
 export function mediaIncrement(e) {
   if (
     e === undefined ||
-    (e.target.value === "" && !ingredientSelection.hasChildNodes())
+    (imputSearch.value === "" &&
+      !ingredientSelection.hasChildNodes() &&
+      e.target.nodeName !== "P")
   ) {
     values = data;
     const { ingredients } = creationCriteriaTable(e, values);
     uptadeTags(e, ingredients);
+    tag();
     e !== undefined &&
       e.target.getAttribute("class") === "remove-tag" &&
-      (dataFilterSearch(e, values), tag());
+      dataFilterSearch(e, values);
   } else {
-    if (e.target.getAttribute("class") !== "remove-tag" && values) {
-      const { value } = dataFilterSearch(e, values);
-      tagSelection(e);
-      values = value;
-      tag();
-      const { ingredients } = creationCriteriaTable(e, values);
-      uptadeTags(e, ingredients);
-    } else {
-      const { value } = dataFilterSearch(e, data);
-      values = value;
-      tag();
-      const { ingredients } = creationCriteriaTable(e, values);
-      uptadeTags(e, ingredients);
-    }
-    // e.target.getAttribute("class") !== "remove-tag" && values
-    //   ? (({ value } = dataFilterSearch(e, values)), tag())
-    //   : (({ value } = dataFilterSearch(e, data)), tag());
-    // e.target.nodeName === "P" && (tagSelection(e), tag());
-    // value !== undefined && (values = value);
-    // if (e.target.getAttribute("class") !== "remove-tag") {
-    //   const { ingredients } = creationCriteriaTable(e, values);
-    //   uptadeTags(e, ingredients);
-    // }
+    let value;
+    e.target.nodeName !== "BUTTON" && values
+      ? (({ value } = dataFilterSearch(e, values)), tag())
+      : (({ value } = dataFilterSearch(e, data)), tag());
+    e.target.nodeName === "P" && tagSelection(e);
+    values = value;
+    tag();
+    const { ingredients } = creationCriteriaTable(e, values);
+    uptadeTags(e, ingredients);
   }
 
   while (sectionMedias.hasChildNodes()) {
@@ -54,7 +43,7 @@ export function mediaIncrement(e) {
   for (let i = 0; i < values.length; i++) {
     renderMedia(values[i]);
   }
-  numberOfRecipes();
+  return numberOfRecipes();
 }
 const imputSearch = document.getElementById("site-search");
 imputSearch.addEventListener("input", mediaIncrement);

@@ -3,22 +3,20 @@ import {
   validationCharacters,
   characterControlUser,
 } from "./filtered_input.js";
-let result;
+let resultSearch;
 let value;
-let resultMainSearch;
+let resultTag;
 let resultIngredients;
 
-function mainSearch(data) {
+function mainSearch(data, resultMainSearch) {
   const valueSearch = data
     .map(function (recipe) {
       for (let val = 0; val < recipe.ingredients.length; val++) {
-        for (let el = 0; el < result.length; el++) {
+        for (let el = 0; el < resultMainSearch.length; el++) {
           if (
-            // resultMainSearch !== undefined &&
-            // resultMainSearch.length > 0 &&
-            result.includes(recipe.name) ||
-            result.includes(recipe.description) ||
-            result[el].toLowerCase() ===
+            resultMainSearch.includes(recipe.name) ||
+            resultMainSearch.includes(recipe.description) ||
+            resultMainSearch[el].toLowerCase() ===
               recipe.ingredients[val].ingredient.toLowerCase()
           ) {
             return recipe;
@@ -56,55 +54,40 @@ export function dataFilterSearch(e, data) {
   } else if (e.target.getAttribute("name") === "main-search") {
     const { repiceSearch } = creationCriteriaTable(e, data);
     const { resultControl } = characterControlUser(e, repiceSearch);
-    ({ resultMainSearch } = validationCharacters(e, resultControl));
+    const { resultMainSearch } = validationCharacters(e, resultControl);
     if (resultMainSearch) {
-      result = resultMainSearch;
-      const { valueSearch } = mainSearch(data);
+      const { valueSearch } = mainSearch(data, resultMainSearch);
+      resultSearch = valueSearch;
       value = valueSearch;
       return { value };
     }
     return {};
   } else if (e.target.nodeName === "P") {
-    resultIngredients !== undefined && resultIngredients.length >= 1
+    resultIngredients !== undefined && resultIngredients.length > 0
       ? resultIngredients.push(e.target.textContent)
       : (resultIngredients = new Array(e.target.textContent));
     const { valueTag } = tagSearch(data);
+    resultTag = valueTag;
     value = valueTag;
     return { value };
-  } else if (
-    e.target.nodeName === "BUTTON" &&
-    e.target.getAttribute("class") === "remove-tag"
-  ) {
-    resultIngredients.splice(
-      resultIngredients.indexOf(e.target.parentNode.textContent),
-      1
-    );
-    const { valueTag } = tagSearch(data);
-    value = valueTag;
-    return { value };
+  } else if (e.target.nodeName === "BUTTON") {
+    if (e.target.getAttribute("class") === "remove-tag") {
+      resultIngredients.splice(
+        resultIngredients.indexOf(e.target.parentNode.textContent),
+        1
+      );
+      if (resultSearch !== undefined && resultSearch.length > 0) {
+        value = resultSearch;
+        return { value };
+      } else {
+        const { valueTag } = tagSearch(data);
+        value = valueTag;
+        return { value };
+      }
+    } else {
+      const { valueTag } = tagSearch(data);
+      value = valueTag;
+      return { value };
+    }
   }
-  // if (
-  //   (imputSearch.value === "" && resultIngredients === undefined) ||
-  //   (resultIngredients !== undefined && resultIngredients.length === 0)
-  // ) {
-  //   return {};
-  // }
-  // else if (
-  //   imputSearch.value !== "" &&
-  //   (resultIngredients === undefined ||
-  //     (resultIngredients.length === 0 &&
-  //       e.target.getAttribute("class") === "remove-tag"))
-  // ) {
-  //   result = resultMainSearch;
-  // } else if (
-  //   imputSearch.value === "" &&
-  //   (resultIngredients === undefined || resultIngredients.length > 0)
-  // ) {
-  //   result = resultIngredients;
-  // } else if (
-  //   imputSearch.value !== "" &&
-  //   (resultIngredients === undefined || resultIngredients.length > 0)
-  // ) {
-  //   result = resultMainSearch;
-  // }
 }
