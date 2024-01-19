@@ -5,7 +5,6 @@ import {
 } from "./filtered_input.js";
 let resultSearch;
 let value;
-let resultTag;
 let resultIngredients;
 
 function mainSearch(data, resultMainSearch) {
@@ -67,7 +66,6 @@ export function dataFilterSearch(e, data) {
       ? resultIngredients.push(e.target.textContent)
       : (resultIngredients = new Array(e.target.textContent));
     const { valueTag } = tagSearch(data);
-    resultTag = valueTag;
     value = valueTag;
     return { value };
   } else if (e.target.nodeName === "BUTTON") {

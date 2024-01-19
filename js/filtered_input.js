@@ -1,7 +1,14 @@
 import { mediaIncrement } from "./index.js";
 
 //Création d'un tableau "repiceSearch" des critères de recherches
-export function creationCriteriaTable(e, data, ingredients, repiceSearch) {
+export function creationCriteriaTable(
+  e,
+  data,
+  ingredients,
+  repiceSearch,
+  appliance,
+  ustensils
+) {
   if (e !== undefined && e.target.getAttribute("name") === `main-search`) {
     const repiceName = data.map(function (obj) {
       const rObj = obj.name;
@@ -30,17 +37,53 @@ export function creationCriteriaTable(e, data, ingredients, repiceSearch) {
     ];
     return { ingredients, repiceSearch };
   } else {
-    const repiceIngredients = data
-      .map(function (objs) {
-        return objs.ingredients.map(function (obj) {
-          const rObj = obj.ingredient.toLowerCase();
-          return rObj;
-        });
-      })
-      .flat();
+    const titreIngredient =
+      e !== undefined && e.target.closest("#btn-ingredient-id");
 
-    ingredients = [...new Set(repiceIngredients)];
-    return { ingredients };
+    const titreAppliance =
+      e !== undefined && e.target.closest("#btn-appliance-id");
+
+    const titreUtensil = e !== undefined && e.target.closest("#btn-utensil-id");
+
+    const repiceIngredients =
+      (titreIngredient !== null ||
+        e === undefined ||
+        e.target.nodeName === "BUTTON") &&
+      data
+        .map(function (objs) {
+          return objs.ingredients.map(function (obj) {
+            const rObj = obj.ingredient.toLowerCase();
+            return rObj;
+          });
+        })
+        .flat();
+    repiceIngredients && (ingredients = [...new Set(repiceIngredients)]);
+
+    const repiceAppliance =
+      (titreAppliance !== null ||
+        e === undefined ||
+        e.target.nodeName === "BUTTON") &&
+      data.map(function (obj) {
+        const rObj = obj.appliance.toLowerCase();
+        return rObj;
+      });
+    repiceAppliance && (appliance = [...new Set(repiceAppliance)]);
+
+    const repiceUstensils =
+      (titreUtensil !== null ||
+        e === undefined ||
+        e.target.nodeName === "BUTTON") &&
+      data
+        .map(function (objs) {
+          return objs.ustensils.map(function (obj) {
+            const rObj = obj.toLowerCase();
+            return rObj;
+          });
+        })
+        .flat();
+    repiceUstensils && (ustensils = [...new Set(repiceUstensils)]);
+
+    return { ingredients, appliance, ustensils };
   }
 }
 
@@ -131,6 +174,10 @@ const input = document.getElementById("site-search");
 // });
 
 // fonction qui supprime les caractères dans la barre de recherche
-export function imputRemove(e) {
-  return e.target.value === "" && (formSearch.reset(), mediaIncrement(e));
+export function imputRemove(e, imputTag) {
+  return e.target.id === "btn-remove-id"
+    ? (formSearch.reset(), mediaIncrement(e))
+    : e.type === "mouseleave" || e.target.id === "btn-remove-tag-id"
+    ? (imputTag.reset(), mediaIncrement(e))
+    : mediaIncrement(e);
 }

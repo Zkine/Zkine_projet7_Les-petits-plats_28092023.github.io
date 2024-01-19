@@ -9,6 +9,7 @@ const searchTag = document.getElementById("search-tag-id");
 
 //Initialisation des critères de recherche.
 let ingredient;
+let appliance;
 
 // Fonction qui met à jour la liste des tags non sélectionnés lorsqu'on supprime un tag.
 function filterArray(dataIngredients, liTag) {
@@ -142,8 +143,7 @@ export function tagData(e) {
   ) {
     e.target.classList.add("btn-tag-active");
   }
-  removeTag();
-  return leaveTag(btnIngredient);
+  return removeTag(), leaveTag(btnIngredient);
 }
 const btnIngredient = document.getElementById("btn-ingredient-id");
 btnIngredient.addEventListener("click", tagData);
@@ -155,15 +155,14 @@ function searchManagement(e) {
   } else {
     btnRemoveTag.classList.remove("btn-remove-tag-active");
   }
-  uptadeTags(e, ingredient);
-  return tagSelection();
+  return uptadeTags(e, ingredient), imputRemove(e);
 }
 searchTag.addEventListener("input", searchManagement);
 
 // Selection d'un tag
 export function tagSelection(e) {
-  const liTag = e.target.closest(".li-tag");
-  if (!liTag.classList.contains("li-tag-active")) {
+  const liTag = e !== undefined && e.target.closest(".li-tag");
+  if (e !== undefined && !liTag.classList.contains("li-tag-active")) {
     const liTagsActive = document.querySelectorAll(".ul-tag .li-tag-active");
     liTag.classList.add("li-tag-active");
     const userSelection = liTag.cloneNode(true);
@@ -176,26 +175,28 @@ export function tagSelection(e) {
       }
     }
     userSelectionIngredient.appendChild(userSelection);
-    return btnRemovetag(), tagRender(e, ingredient);
+    return removeSearchTag(e), btnRemovetag(), tagRender(e, ingredient);
   }
+  return {};
 }
 
 // Supprime les caractères de input
-function removeSearchTag() {
+function removeSearchTag(e) {
   const formTag = document.getElementById("form-tag-id");
   btnRemoveTag.classList.contains("btn-remove-tag-active") &&
     btnRemoveTag.classList.remove("btn-remove-tag-active");
-  // tagRender(e, ingredient);
-  return formTag.reset();
+  return e.target.nodeName === "P"
+    ? formTag.reset()
+    : (tagRender(e, ingredient), imputRemove(e, formTag));
 }
 btnRemoveTag.addEventListener("click", removeSearchTag, { once: true });
 
 // La div se réinitialise lorsque le curseur sort du champ des tags
-function leaveTag() {
-  btnIngredient.addEventListener("mouseleave", function () {
+function leaveTag(btnIngredient) {
+  btnIngredient.addEventListener("mouseleave", function (e) {
     if (this.classList.contains("btn-tag-active")) {
       this.classList.remove("btn-tag-active");
-      return removeSearchTag();
+      return removeSearchTag(e);
     }
   });
 }

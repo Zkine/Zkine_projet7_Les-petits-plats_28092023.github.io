@@ -15,20 +15,29 @@ export function mediaIncrement(e) {
     e === undefined ||
     (imputSearch.value === "" &&
       !ingredientSelection.hasChildNodes() &&
-      e.target.nodeName !== "P")
+      e.target.nodeName === "BUTTON")
   ) {
     values = data;
-    const { ingredients } = creationCriteriaTable(e, values);
-    uptadeTags(e, ingredients);
+    const { ingredients, appliance, ustensils } = creationCriteriaTable(
+      e,
+      values
+    );
+    uptadeTags(e, ingredients, appliance, ustensils);
     tag();
     e !== undefined &&
       e.target.getAttribute("class") === "remove-tag" &&
       dataFilterSearch(e, values);
   } else {
+    if (
+      (e !== undefined && e.target.name === "tag-search-ingredient") ||
+      e.type === "mouseleave"
+    ) {
+      return tag();
+    }
     let value;
     e.target.nodeName !== "BUTTON" && values
-      ? (({ value } = dataFilterSearch(e, values)), tag())
-      : (({ value } = dataFilterSearch(e, data)), tag());
+      ? ({ value } = dataFilterSearch(e, values))
+      : ({ value } = dataFilterSearch(e, data));
     e.target.nodeName === "P" && tagSelection(e);
     values = value;
     tag();
