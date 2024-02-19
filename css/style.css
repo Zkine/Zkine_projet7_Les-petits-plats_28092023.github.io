@@ -102,7 +102,7 @@
     background: rgba(0, 0, 0, 0);
     opacity: 0;
     border: none;
-    clip-path: rect(0);
+    clip-path: circle(0);
     height: 1px;
     margin: -1px;
     overflow: hidden;
@@ -131,7 +131,7 @@
     left: 856px;
     cursor: pointer;
     opacity: 1;
-    clip-path: rect(100%);
+    clip-path: circle(100%);
 }
 
 .span-search {
@@ -274,15 +274,24 @@
 
 .btn-remove-tag {
     position: absolute;
-    background: rgba(0, 0, 0, 0);
     opacity: 0;
     border: none;
-    clip-path: rect(0);
+    clip-path: rect(0%);
     height: 1px;
     margin: -1px;
     overflow: hidden;
     padding: 0;
     width: 1px;
+}
+
+.btn-remove-tag-active {
+    opacity: 1;
+    height: 10px;
+    width: 10px;
+    top: 62px;
+    right: 48px;
+    clip-path: rect(100%);
+    overflow: clip;
 }
 
 .btn-remove-tag::after {
@@ -300,15 +309,6 @@
     top: 0px;
     left: 2px;
     z-index: 2;
-}
-
-.btn-remove-tag-active {
-    opacity: 1;
-    height: 10px;
-    width: 10px;
-    top: 62px;
-    right: 48px;
-    clip-path: rect(100%);
 }
 
 .span-search-tag {
@@ -374,7 +374,7 @@
     right: 15px;
     background: rgba(0, 0, 0, 0);
     border: none;
-    clip-path: rect(0);
+    clip-path: circle(0);
     height: 1px;
     margin: -1px;
     overflow: hidden;
@@ -387,7 +387,7 @@
     opacity: 1;
     width: 15px;
     height: 15px;
-    clip-path: rect(100%);
+    clip-path: circle(100%);
     overflow: visible;
 }
 
@@ -399,7 +399,6 @@
     display: inline-block;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
-    position: absolute;
     top: 0px;
     right: 0px;
     font-size: 17px;
@@ -414,7 +413,9 @@
 
 
 .tag-selection {
+    display: flex;
     padding: 0;
+    gap: 15px
 }
 
 .tag-selection .li-tag-active,

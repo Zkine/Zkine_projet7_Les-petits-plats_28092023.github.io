@@ -2,68 +2,43 @@ import data from "../data/recipes.js";
 import { renderMedia, numberOfRecipes } from "./recipe.js";
 import { dataFilterSearch } from "./repiceSearch.js";
 import { creationCriteriaTable } from "./filtered_input.js";
-import { uptadeTags, tagSelection } from "./filtered_tag.js";
+import { uptadeTags } from "./filtered_tag.js";
 // Fonction qui fait appel au DATA des recettes puis la boucle permet d'incrémenter le DOM par défault ou par filtres
 
 const sectionMedias = document.getElementById("section-media-id");
-const ingredientSelection = document.getElementById(
-  "tag-selection-ingrédients"
-);
-let values;
 export function mediaIncrement(e) {
   if (
-    e === undefined ||
-    (imputSearch.value === "" &&
-      !ingredientSelection.hasChildNodes() &&
-      e.target.nodeName === "BUTTON")
-  ) {
-    values = data;
-    const { ingredients, appliance, ustensils } = creationCriteriaTable(
-      e,
-      values
-    );
-    uptadeTags(e, ingredients, appliance, ustensils);
-    tag();
-    e !== undefined &&
-      e.target.getAttribute("class") === "remove-tag" &&
-      dataFilterSearch(e, values);
+    (e !== undefined && e.target.className === "btn-tag") ||
+    (e !== undefined && e.target.className === "tag-search")
+  )
+    return tag();
+  const { value } = dataFilterSearch(e, data, imputSearch);
+  if (value) {
+    const { repiceIngredients, repiceAppliance, repiceUstensils } =
+      creationCriteriaTable(e, value);
+    uptadeTags(e, repiceIngredients, repiceAppliance, repiceUstensils);
   } else {
-    if (
-      (e !== undefined && e.target.name === "tag-search-ingredient") ||
-      e.type === "mouseleave"
-    ) {
-      return tag();
-    }
-    let value;
-    e.target.nodeName !== "BUTTON" && values
-      ? ({ value } = dataFilterSearch(e, values))
-      : ({ value } = dataFilterSearch(e, data));
-    e.target.nodeName === "P" && tagSelection(e);
-    values = value;
-    tag();
-    const { ingredients } = creationCriteriaTable(e, values);
-    uptadeTags(e, ingredients);
+    return {};
   }
-
   while (sectionMedias.hasChildNodes()) {
     sectionMedias.removeChild(sectionMedias.firstChild);
   }
-
-  for (let i = 0; i < values.length; i++) {
-    renderMedia(values[i]);
+  for (let i = 0; i < value.length; i++) {
+    renderMedia(value[i]);
   }
-  return numberOfRecipes();
+  numberOfRecipes();
+  tag();
 }
 const imputSearch = document.getElementById("site-search");
 imputSearch.addEventListener("input", mediaIncrement);
-function tag() {
-  setTimeout(() => {
-    const itemIngredient = document.getElementsByClassName("li-tag");
-    for (let el = 0; el < itemIngredient.length; el++) {
-      itemIngredient[el].addEventListener("click", mediaIncrement);
-    }
-  }, 0);
-}
-tag();
 
+function tag() {
+  const itemIngredient = document.getElementsByClassName("li-tag");
+  const itemIngredients = Promise.resolve(itemIngredient);
+  itemIngredients.then((value) => {
+    for (let el = 0; el < value.length; el++) {
+      value[el].addEventListener("click", mediaIncrement);
+    }
+  });
+}
 export default mediaIncrement();

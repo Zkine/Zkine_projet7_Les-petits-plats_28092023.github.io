@@ -9,17 +9,23 @@ export function creationCriteriaTable(
   appliance,
   ustensils
 ) {
-  if (e !== undefined && e.target.getAttribute("name") === `main-search`) {
+  function name() {
     const repiceName = data.map(function (obj) {
       const rObj = obj.name;
       return rObj;
     });
+    return repiceName;
+  }
 
+  function description() {
     const repiceDescription = data.map(function (obj) {
       const rObj = obj.description;
       return rObj;
     });
+    return repiceDescription;
+  }
 
+  function ingredients() {
     const repiceIngredients = data
       .map(function (objs) {
         return objs.ingredients.map(function (obj) {
@@ -28,75 +34,73 @@ export function creationCriteriaTable(
         });
       })
       .flat();
+    return repiceIngredients;
+  }
 
-    ingredients = [...new Set(repiceIngredients)];
-    repiceSearch = [
-      ...repiceName,
-      ...repiceDescription,
-      ...new Set(ingredients),
-    ];
-    return { ingredients, repiceSearch };
+  function appliance() {
+    const repiceAppliance = data.map(function (obj) {
+      const rObj = obj.appliance.toLowerCase();
+      return rObj;
+    });
+    return repiceAppliance;
+  }
+
+  function ustensils() {
+    const repiceUstensils = data
+      .map(function (objs) {
+        return objs.ustensils.map(function (obj) {
+          const rObj = obj.toLowerCase();
+          return rObj;
+        });
+      })
+      .flat();
+    return repiceUstensils;
+  }
+  let repiceIngredients;
+  let repiceAppliance;
+  let repiceUstensils;
+  if (
+    (e !== undefined && e.target.getAttribute("name") === `main-search`) ||
+    (e !== undefined && e.target.nodeName === "BUTTON")
+  ) {
+    const Name = name();
+    const Description = description();
+    const Ingredients = ingredients();
+    repiceIngredients = [...new Set(Ingredients)];
+    repiceAppliance = appliance();
+    repiceAppliance = [...new Set(repiceAppliance)];
+    repiceUstensils = ustensils();
+    repiceUstensils = [...new Set(repiceUstensils)];
+    repiceSearch = [...Name, ...Description, ...Ingredients];
+    return {
+      repiceSearch,
+      repiceIngredients,
+      repiceAppliance,
+      repiceUstensils,
+    };
   } else {
-    const titreIngredient =
-      e !== undefined && e.target.closest("#btn-ingredient-id");
-
-    const titreAppliance =
-      e !== undefined && e.target.closest("#btn-appliance-id");
-
-    const titreUtensil = e !== undefined && e.target.closest("#btn-utensil-id");
-
-    const repiceIngredients =
-      (titreIngredient !== null ||
-        e === undefined ||
-        e.target.nodeName === "BUTTON") &&
-      data
-        .map(function (objs) {
-          return objs.ingredients.map(function (obj) {
-            const rObj = obj.ingredient.toLowerCase();
-            return rObj;
-          });
-        })
-        .flat();
-    repiceIngredients && (ingredients = [...new Set(repiceIngredients)]);
-
-    const repiceAppliance =
-      (titreAppliance !== null ||
-        e === undefined ||
-        e.target.nodeName === "BUTTON") &&
-      data.map(function (obj) {
-        const rObj = obj.appliance.toLowerCase();
-        return rObj;
-      });
-    repiceAppliance && (appliance = [...new Set(repiceAppliance)]);
-
-    const repiceUstensils =
-      (titreUtensil !== null ||
-        e === undefined ||
-        e.target.nodeName === "BUTTON") &&
-      data
-        .map(function (objs) {
-          return objs.ustensils.map(function (obj) {
-            const rObj = obj.toLowerCase();
-            return rObj;
-          });
-        })
-        .flat();
-    repiceUstensils && (ustensils = [...new Set(repiceUstensils)]);
-
-    return { ingredients, appliance, ustensils };
+    repiceIngredients = ingredients();
+    repiceIngredients = [...new Set(repiceIngredients)];
+    repiceAppliance = appliance();
+    repiceAppliance = [...new Set(repiceAppliance)];
+    repiceUstensils = ustensils();
+    repiceUstensils = [...new Set(repiceUstensils)];
+    return { repiceIngredients, repiceAppliance, repiceUstensils };
   }
 }
 
 //Fonction qui filtrer le contenu du tableau des critères de recherche - fonction creationCriteriaTable - selon les données saisies par l'utilisateur
 //et crée un tableau : constante result.
 export function characterControlUser(e, repiceSearch) {
-  repiceSearch !== undefined &&
-    e.target.value === undefined &&
-    (e.target.value = e.target.textContent);
+  const inputText = e.value
+    ? e.value
+    : e.target.textContent !== ""
+    ? e.target.textContent
+    : e.target.value !== "" && e.target.value;
+
   const resultControl = repiceSearch.filter(function (el) {
     return (
-      JSON.stringify(el).toLowerCase().indexOf(e.target.value.toLowerCase()) !==
-      -1
+      JSON.stringify(el).toLowerCase().indexOf(inputText.toLowerCase()) !== -1
     );
   });
   return { resultControl };
@@ -107,22 +111,27 @@ const formSearch = document.getElementById("form-search-id");
 const spanSearch = document.getElementById("span-search-id");
 const paragraphSearch = document.getElementById("paragraph-search-id");
 export function validationCharacters(e, resultMainSearch) {
+  const inputText = e.value ? e.value : e.target.value !== "" && e.target.value;
   const btnRemove = formSearch[1];
   if (resultMainSearch !== undefined && resultMainSearch.length === 0) {
     const regex = new RegExp(/([^‘]*)(?=\’)/);
     const characterInput = paragraphSearch
       .getAttribute("data-error")
-      .replace(regex, e.target.value);
-    e.target.value.length <= 20 &&
+      .replace(regex, inputText);
+    inputText.length <= 20 &&
       paragraphSearch.setAttribute("data-error", characterInput);
     paragraphSearch.setAttribute("data-error-visible", "true");
     spanSearch.classList.add("span-search-active");
     btnRemove.classList.add("btn-remove-delete");
     return {};
   } else if (
-    resultMainSearch !== undefined &&
-    resultMainSearch.length !== 0 &&
-    e.target.value.length >= 3
+    (resultMainSearch !== undefined &&
+      resultMainSearch.length !== 0 &&
+      e.target !== undefined &&
+      inputText.length >= 3) ||
+    (resultMainSearch !== undefined &&
+      resultMainSearch.length !== 0 &&
+      e.nodeName === "INPUT")
   ) {
     paragraphSearch.setAttribute("data-error-visible", "false");
     !btnRemove.classList.contains("btn-remove-delete") &&
@@ -137,7 +146,7 @@ export function validationCharacters(e, resultMainSearch) {
     if (
       e.code !== "Backspace" &&
       e.code !== "Delete" &&
-      e.target.value.length <= 2 &&
+      inputText.length <= 2 &&
       e.target.attributes[0].textContent !== "button"
     ) {
       return {};
@@ -177,7 +186,10 @@ const input = document.getElementById("site-search");
 export function imputRemove(e, imputTag) {
   return e.target.id === "btn-remove-id"
     ? (formSearch.reset(), mediaIncrement(e))
-    : e.type === "mouseleave" || e.target.id === "btn-remove-tag-id"
+    : e.type === "mouseleave" ||
+      e.target.id === "btn-remove-ingredient-id" ||
+      e.target.id === "btn-remove-appliance-id" ||
+      e.target.id === "btn-remove-ustensil-id"
     ? (imputTag.reset(), mediaIncrement(e))
     : mediaIncrement(e);
 }
